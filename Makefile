@@ -17,7 +17,7 @@ scheduler.o: scheduler.c
 uprocess: uprocess.o
 	$(GCC)  $(CFLAGS) uprocess.o scheduler.o -o uprocess
 
-testsims.o: uprocess.c
+uprocess.o: uprocess.c
 	$(GCC) $(CFLAGS) -c uprocess.c
 
 clean:
