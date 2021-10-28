@@ -19,36 +19,35 @@
 #define PROCESSES 18
 #define LOG_FILENAME "oss.log"
 
-// shared memory 
-struct shmbuf {
-	
-	// os simulated clock
-	int ossec = 0;	// initial value for clock seconds
-	int osnano = 0; // initial value for clock nanoseconds
+struct proc_ctrl_blck {
 
-	// process table
-	struct proc_table ptab[18];
-}
+	int id; // pid of uproc
+	int ptype; // 0 - CPU, 1 - I/O
+	int operation;
+	int startsec;
+	int startnano;
+	int runsec;
+	int runnano;
+	int donesec;
+	int donenano;
+	int pqueue; // hold value of priority queue assigned
+};
 
 struct proc_table {
 
 	struct proc_ctrl_blck pcb[18];
-}
+};
 
-struct proc_ctrl_blck {
+// shared memory 
+struct shared_data {
+	
+	// os simulated clock
+	int ossec;	// initial value for clock seconds
+	int osnano; // initial value for clock nanoseconds
 
-	int id = NULL; // pid of uproc
-	int ptype; // 0 - CPU, 1 - I/O
-	int operation = 0;
-	int startsec = 0;
-	int startnano = 0;
-	int runsec = 0;
-	int runnano = 0;
-	int donesec = 0;
-	int donenano = 0;
-	int pqueue; // hold value of priority queue assigned
-}
-
+	// process table
+	struct proc_table ptab;
+};
 
 // time given to uproc from os for run time alloted
 extern int assignedsec;
@@ -61,7 +60,7 @@ extern int assignednano;
 struct queue {
 	
 
-}
+};
 
 // TODO need to check if queue is full/empty
 // TODO have some time that will allow blocked queue to be
