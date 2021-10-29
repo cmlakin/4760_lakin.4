@@ -39,12 +39,17 @@
 // int maxTimeBetweenNewProcsNS;
 // int maxTimeBetweenNewProcsSecs;
 
+#define MAX_TEXT 50
+
 char perror_buf[50]; // buffer for perror
 const char * perror_arg0 = "oss"; // pointer to return error value
 
 static int shmid = -1; // shared memory identifier
 static char *shm_keyname;  // shared memory key path
 static struct shared_data * shdata = NULL; // shared memory pointer
+
+static char *msg1_keyname = "oss";
+
 
 void processCommandLine(int, char **);
 void init_shared_data();
@@ -164,8 +169,8 @@ void init_shared_data(){
 	// TODO clear all of shared data
 	
 	// messages
-	key_t sndkey = ftok(shm_keyname, 9378);
-	
+	key_t sndkey = ftok(msg1_keyname, 5);
+
 	if (sndkey == -1) {
 
 		snprintf(perror_buf, sizeof(perror_buf), "%s: ftok: ", perror_arg0);
@@ -173,7 +178,7 @@ void init_shared_data(){
 		//return -1;
 	}
 
-	key_t rcvkey = ftok(shm_keyname, 8769);
+	key_t rcvkey = ftok(shm_keyname, 2);
 	
 	if (rcvkey == -1) {
 
@@ -182,8 +187,33 @@ void init_shared_data(){
 		//return -1;
 	}
 
+	int running = 1;
+	int msgid;
+	struct msgbuf sndmsg;
+	long int msg_rec = 0;
+	//char buffer[20];
+	
+	msgid = msgget(sndkey, 0666 | IPC_CREAT);
+	if (msgid == -1) {
+
+		printf("Error creating queue\n");
+	}
+
+	while(running) {
+
+		sndmsg.mtype = 1;
+		strcpy(sndmsg.mtext, "foo\n");
+		if (msgsnd(msgid, (void *)&sndmsg, MAX_TEXT, 0) == -1) {
+
+			printf("Message not sent\n");
+		}
+		running = 0;
+	
+	}
 
 
+	msgrcv(msgid, (void *)&sndmsg, BUFSIZ, msg_rec, 0);
+	printf("msg received: %s\n", sndmsg.mtext);
 
 
 

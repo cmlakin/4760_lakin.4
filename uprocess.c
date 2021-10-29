@@ -1,6 +1,9 @@
 #include "config.h"
 
 
+char perror_buf[50];
+const char * perror_arg0 = "uprocess";
+static char *msg1_keyname = "oss";
 
 // TODO wait for message from oss
 
@@ -28,11 +31,48 @@
 // 		- how much time it ran for (add this to the otime clock)
 //			- if terminate: send msg to oss then terminate itself
 //
+struct uproc_msgbuf{
 
+	long int mtype;
+	char mtext[BUFSIZ];
+};
 
 int main (int argc, char ** argv){
 
 	printf("In uprocess\n");
 
+	int running = 1;
+	int msgid;
+	struct msgbuf sndmsg;
+	long int msg_rec = 0;
+
+	key_t sndkey = ftok(msg1_keyname, 5);
+
+	if (sndkey == -1) {
+
+		snprintf(perror_buf, sizeof(perror_buf), "%s: ftok: ", perror_arg0);
+		perror(perror_buf);
+	}
+
+	msgid=msgget(sndkey, 0666 | IPC_CREAT);
+
+	while (running) {
+
+		msgrcv(msgid, (void *)&sndmsg, BUFSIZ, msg_rec, 0);
+		printf("msg received: %s\n", sndmsg.mtext);
+	
+
+
+		sndmsg.mtype = 1;
+		strcpy(sndmsg.mtext, "bar\n");
+		if (msgsnd(msgid, (void *)&sndmsg, MAX_TEXT, 0) == -1) {
+
+			printf("Message not sent\n");
+		}
+
+		running = 0;	
+	}
+	while (1);
+	//msgctl(msgid, IPC_RMID, 0);
 	return 0;
 }
