@@ -28,3 +28,11 @@
 // 		- how much time it ran for (add this to the otime clock)
 //			- if terminate: send msg to oss then terminate itself
 //
+
+
+int main (int argc, char ** argv){
+
+	printf("In uprocess\n");
+
+	return 0;
+}

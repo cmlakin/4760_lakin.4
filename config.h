@@ -53,6 +53,17 @@ struct shared_data {
 extern int assignedsec;
 extern int assignednano;
 
+extern const int QUEUE_ID = 1;
+extern const int SHM_ID = 2;
+
+// message buffer
+struct msgbuf {
+	long mtype;
+	char mtext[1];
+};
+
+int msgsnd(int msgid, const void *msgp, size_t msgsz, int msgflg);
+int msgrcv(int msgid, const void *msgp, size_t msgsz, long msgtype, int msgflg);
 
 /* TODO not sure what to put in here yet. 
  * Do I need a separte queue for each priority/blocked? */
