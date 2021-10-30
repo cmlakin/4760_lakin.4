@@ -3,7 +3,7 @@
 
 char perror_buf[50];
 const char * perror_arg0 = "uprocess";
-static char *msg1_keyname = "oss";
+//static char *msg1_keyname = "oss";
 
 // TODO wait for message from oss
 
@@ -41,12 +41,12 @@ int main (int argc, char ** argv){
 
 	printf("In uprocess\n");
 
-	int running = 1;
+	//int running = 1;
 	int msgid;
 	struct msgbuf sndmsg;
 	long int msg_rec = 0;
 
-	key_t sndkey = ftok(msg1_keyname, 5);
+	key_t sndkey = ftok(FTOK_BASE, FTOK_MSG);
 
 	if (sndkey == -1) {
 
@@ -56,23 +56,21 @@ int main (int argc, char ** argv){
 
 	msgid=msgget(sndkey, 0666 | IPC_CREAT);
 
-	while (running) {
-
-		msgrcv(msgid, (void *)&sndmsg, BUFSIZ, msg_rec, 0);
-		printf("msg received: %s\n", sndmsg.mtext);
+	msgrcv(msgid, (void *)&sndmsg, BUFSIZ, msg_rec, 0);
+	printf("msg received: %s\n", sndmsg.mtext);
 	
 
+	sndmsg.mtype = MSG_SEND_OSS;
+	strcpy(sndmsg.mtext, "bar\n");
+	if (msgsnd(msgid, (void *)&sndmsg, MAX_TEXT, 0) == -1) {
 
-		sndmsg.mtype = 1;
-		strcpy(sndmsg.mtext, "bar\n");
-		if (msgsnd(msgid, (void *)&sndmsg, MAX_TEXT, 0) == -1) {
-
-			printf("Message not sent\n");
-		}
-
-		running = 0;	
+		printf("Message not sent\n");
 	}
+
+	printf("Uproc message sent\n");
+	printf("Uproc done\n");
+
 	while (1);
 	//msgctl(msgid, IPC_RMID, 0);
-	return 0;
+	exit(0);;
 }

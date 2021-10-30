@@ -16,26 +16,28 @@
 char perror_buf[50]; // buffer for perror
 const char * perror_arg0 = "oss"; // pointer to return error value
 
-static int shmid = -1; // shared memory identifier
-static char *shm_keyname;  // shared memory key path
-static struct shared_data * shdata = NULL; // shared memory pointer
+static int shm_id = -1; // shared memory identifier
+//static char *shm_keyname;  // shared memory key path
+static struct shared_data * shm_data = NULL; // shared memory pointer
 
-static char *msg1_keyname = "oss";
-
+static int msg_id = -1;
 
 void processCommandLine(int, char **);
-void init_shared_data();
+void initialize();
+void initializeSharedMemory();
+void initializeMessageQueue();
 int deinit_shared_data();
 void createProcess();
 void testSync();
 
 int main(int argc, char ** argv){
 
+	
 	processCommandLine(argc, argv);
-	init_shared_data();
+	initialize();
 	createProcess();
 	testSync();
-
+	
 	pid_t pid; 
 						
 	pid = fork();
@@ -56,9 +58,12 @@ int main(int argc, char ** argv){
 	}
 
 	//deinit_shared_data();
-	shmdt(shdata);
-	shmctl(shmid, IPC_RMID, NULL);
-	return 0;
+	//shmdt(shdata);
+	//shmctl(shmid, IPC_RMID, NULL);
+
+	printf("oss done\n");
+
+	exit(-1);;
 }
 
 
@@ -104,21 +109,21 @@ void processCommandLine(int argc, char ** argv) {
 
 }
 
+void initialize() {
+	initializeSharedMemory();
+	initializeMessageQueue();
+}
 
 
-
-void init_shared_data(){
+void initializeSharedMemory(){
 
 	int flags = 0;
-	// create shared memory keyname
-	//snprintf(shm_keyname, PATH_MAX, "/tmp/oss.%u", getuid());
-	shm_keyname = "./oss.c";
 	
 	// set flags for shared memory creation
 	flags = (0700 | IPC_CREAT);
 
 	// make a key for our shared memory
-	key_t fkey = ftok(shm_keyname, 9256);
+	key_t fkey = ftok(FTOK_BASE, FTOK_SHM);
 	
 	if (fkey == -1) {
 		
@@ -128,10 +133,10 @@ void init_shared_data(){
 	}
 
 	// get a shared memory region
-	shmid = shmget(fkey, sizeof(struct shared_data), flags);
+	shm_id = shmget(fkey, sizeof(struct shared_data), flags);
 
 	// if shmget failed
-	if (shmid == -1) {
+	if (shm_id == -1) {
 		
 		snprintf(perror_buf, sizeof(perror_buf), "%s: shmget: ", perror_arg0);
 		perror(perror_buf);
@@ -139,69 +144,42 @@ void init_shared_data(){
 	}
 	
 	// attach the region to process memory
-	shdata = (struct shared_data*)shmat(shmid, NULL, 0);
+	shm_data = (struct shared_data*)shmat(shm_id, NULL, 0);
 	
 	// if attach failed
-	if (shdata == (void*)-1) {
+	if (shm_data == (void*)-1) {
 
 		snprintf(perror_buf, sizeof(perror_buf), "%s: shmat: ", perror_arg0);
 		perror(perror_buf);
 		//return -1;
 	}
 
-	shdata->ossec = 0;
-	shdata->osnano = 0;
+	shm_data->ossec = 0;
+	shm_data->osnano = 0;
+}
 
-	key_t sndkey = ftok(msg1_keyname, 5);
-
-	if (sndkey == -1) {
-		
-		snprintf(perror_buf, sizeof(perror_buf), "%s: ftok: ", perror_arg0);
-		perror(perror_buf);
-		//return -1;
-	}
-
-	key_t rcvkey = ftok(shm_keyname, 2);
-		
-	if (rcvkey == -1) {
-
-		snprintf(perror_buf, sizeof(perror_buf), "%s: ftok: ", perror_arg0);
-		perror(perror_buf);
-		//return -1;
-	}
-
-	int running = 1;
-	int msgid;
-	struct msgbuf sndmsg;
-	long int msg_rec = 0;
+void initializeMessageQueue() {
 	
-	msgid = msgget(sndkey, 0666 | IPC_CREAT);
-	if (msgid == -1) {
+	key_t msgkey = ftok(FTOK_BASE, FTOK_MSG);
+
+	if (msgkey == -1) {
+		
+		snprintf(perror_buf, sizeof(perror_buf), "%s: ftok: ", perror_arg0);
+		perror(perror_buf);
+		//return -1;
+	}
+	
+	msg_id = msgget(msgkey, 0666 | IPC_CREAT);
+	if (msg_id == -1) {
 		printf("Error creating queue\n");
 	}
-
-	while(running) {
-		
-		sndmsg.mtype = 1;
-		
-		strcpy(sndmsg.mtext, "foo\n");
-		if (msgsnd(msgid, (void *)&sndmsg, MAX_TEXT, 0) == -1) {
-
-			printf("Message not sent\n");
-		}
-	
-		running = 0;
-	}
-
-	msgrcv(msgid, (void *)&sndmsg, BUFSIZ, msg_rec, 0);
-	printf("msg received: %s\n", sndmsg.mtext);
 }
 
 
 int deinit_shared_data() {
 
 	//detach shared pointer
-	if (shmdt(shdata) == -1) {
+	if (shmdt(shm_data) == -1) {
 
 		snprintf(perror_buf, sizeof(perror_buf), "%s: shmdt: ", perror_arg0);
 		perror(perror_buf);
@@ -209,7 +187,7 @@ int deinit_shared_data() {
 	}
 
 	// remove the region from system
-	shmctl(shmid, IPC_RMID, NULL);
+	shmctl(shm_id, IPC_RMID, NULL);
 
 	return 0;
 }

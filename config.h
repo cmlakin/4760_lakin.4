@@ -15,6 +15,14 @@
 #include <time.h>
 #include <unistd.h>
 
+#define FTOK_SHM 1
+#define FTOK_MSG 2
+#define FTOK_BASE "oss.c"
+
+#define MSG_SEND_UPROC 1
+#define MSG_RECV_UPROC MSG_SEND_UPROC
+#define MSG_SEND_OSS 2
+#define MSG_RECV_OSS MSG_SEND_OSS
 
 #define MAX_TEXT 50
 #define PROCESSES 18
