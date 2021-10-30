@@ -25,6 +25,7 @@ static char *msg1_keyname = "oss";
 
 void processCommandLine(int, char **);
 void init_shared_data();
+int deinit_shared_data();
 void createProcess();
 void testSync();
 
@@ -50,9 +51,13 @@ int main(int argc, char ** argv){
 	}
 	else{
 		
-		while(1); // jsut using to stall for right now. 
+		printf("Program finished");
+		//while(1); // jsut using to stall for right now. 
 	}
 
+	//deinit_shared_data();
+	shmdt(shdata);
+	shmctl(shmid, IPC_RMID, NULL);
 	return 0;
 }
 
@@ -191,6 +196,28 @@ void init_shared_data(){
 	msgrcv(msgid, (void *)&sndmsg, BUFSIZ, msg_rec, 0);
 	printf("msg received: %s\n", sndmsg.mtext);
 }
+
+
+int deinit_shared_data() {
+
+	//detach shared pointer
+	if (shmdt(shdata) == -1) {
+
+		snprintf(perror_buf, sizeof(perror_buf), "%s: shmdt: ", perror_arg0);
+		perror(perror_buf);
+		return -1;
+	}
+
+	// remove the region from system
+	shmctl(shmid, IPC_RMID, NULL);
+
+	return 0;
+}
+
+
+
+
+
 
 void createProcess(){
 
