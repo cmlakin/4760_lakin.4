@@ -16,6 +16,7 @@
 #include <unistd.h>
 
 
+#define MAX_TEXT 50
 #define PROCESSES 18
 #define LOG_FILENAME "oss.log"
 
@@ -56,7 +57,6 @@ extern int assignednano;
 //extern const int QUEUE_ID = 1;
 //extern const int SHM_ID = 2;
 
-#define MAX_TEXT 50
 
 // message buffer
 struct msgbuf {
