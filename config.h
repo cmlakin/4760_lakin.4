@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ipc.h>
+#include <sys/mman.h>
 #include <sys/msg.h>
 #include <sys/shm.h>
 #include <sys/stat.h>
@@ -14,6 +15,7 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
+
 
 #define FTOK_SHM 1
 #define FTOK_MSG 2
@@ -24,15 +26,16 @@
 #define MSG_SEND_OSS 2
 #define MSG_RECV_OSS MSG_SEND_OSS
 
-#define MAX_TEXT 50
 #define PROCESSES 18
 #define LOG_FILENAME "oss.log"
+
 
 extern int running; // 0 is no process running, 1 if process running
 
 struct proc_ctrl_blck {
 
 	int id; // pid of uproc
+	
 	int ptype; // 0 - CPU, 1 - I/O
 	int operation;
 	int startsec;
@@ -49,15 +52,17 @@ struct proc_table {
 	struct proc_ctrl_blck pcb[18];
 };
 
-// shared memory 
+// shared memory
 struct shared_data {
-	
+
+	int local_pid;
+
 	// os simulated clock
 	int ossec;	// initial value for clock seconds
 	int osnano; // initial value for clock nanoseconds
 	int osRunSec;	// initial allowed runtime sec given to uproc
 	int osRunNano; // initial allowed runtime nano given to uproc
-	
+
 	// process table
 	struct proc_table ptab;
 };
@@ -69,6 +74,7 @@ extern int assignednano;
 //extern const int QUEUE_ID = 1;
 //extern const int SHM_ID = 2;
 
+#define MAX_TEXT 50
 
 // message buffer
 struct msgbuf {
@@ -77,17 +83,17 @@ struct msgbuf {
 };
 
 
-/* TODO not sure what to put in here yet. 
+/* TODO not sure what to put in here yet.
  * Do I need a separte queue for each priority/blocked? */
 
 struct queue {
-	
+
 
 };
 
 // TODO need to check if queue is full/empty
 // TODO have some time that will allow blocked queue to be
-// 		reprioritized. 
+// 		reprioritized.
 
 // TODO msgbuffer oss to uprocess
 // 			- id
@@ -100,7 +106,3 @@ struct queue {
 // 			- type (CPU/IO)
 // 			- runsec
 // 			- runnano
-
-
-
-

@@ -3,7 +3,8 @@
 
 char perror_buf[50];
 const char * perror_arg0 = "uprocess";
-//static char *msg1_keyname = "oss";
+//static char * FTOK_BASE[PATH_MAX];
+
 
 static int msg_id;
 static struct msgbuf sndmsg;
@@ -21,20 +22,17 @@ void operationChoice();
 
 int main (int argc, char ** argv){
 
-// TODO wait for message from oss
 	printf("In uprocess\n");
 
-	uprocInitialize();
+
+  uprocInitialize();
 	uprocFinished();
-
-
-	//msgctl(msgid, IPC_RMID, 0);
-	exit(0);
 }
 
+
 void uprocInitialize(){
-	
-	// TODO wait for message from oss
+
+// TODO wait for message from oss
 	printf("Initializing user process: %d\n", getpid());
 
 	key_t sndkey = ftok(FTOK_BASE, FTOK_MSG);
@@ -52,9 +50,9 @@ void uprocInitialize(){
 
 }
 
-
 void uprocFinished() {
-//TODO send msg back to oss:
+
+// TODO send msg back to oss:
 // 		- what type of process it is
 // 		- operation number it chose
 //		- how much time it will run for
@@ -71,7 +69,6 @@ void uprocFinished() {
 	exit(0);
 }
 
-
 void pickType() {
 
 // TODO determine % of how many can be I/O bound and CPU processes
@@ -79,16 +76,13 @@ void pickType() {
 }
 
 void operationChoice() {
-	
-// TODO randomly pick operation choice:	
+
+// TODO randomly pick operation choice:
 // 		0 - use all time allowed (higher chance for CPU)
 // 		1 - terminate (chance of this option should be low)
 // 		2 - use part of time (higher chance for I/O bound)
-// 		
+
 }
-
-
-
 
 
 
