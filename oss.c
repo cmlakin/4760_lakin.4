@@ -12,6 +12,8 @@
 #include <time.h>
 
 #define MAX_TEXT 50
+const unsigned long maxTimeBetweenNewProcsNS = 1000000000;
+const int maxTimeBetweenNewProcsSecs = 2;
 
 char perror_buf[50]; // buffer for perror
 const char * perror_arg0 = "oss"; // pointer to return error value
@@ -27,43 +29,62 @@ void initialize();
 void initializeSharedMemory();
 void initializeMessageQueue();
 int deinit_shared_data();
-void createProcess();
+pid_t createProcess();
 void testSync();
+void createMessageQueue();
+unsigned long launchTime();
+void ossClock();
+void addToQueue();
+void evaluateQueue();
+void scheduleProc();
+void updateClock(int, int);
+void initProcRunTime();
 
 int main(int argc, char ** argv){
 
 	
 	processCommandLine(argc, argv);
 	initialize();
-	createProcess();
-	testSync();
-	
-	pid_t pid; 
-						
-	pid = fork();
-	if (pid == -1){
+	initProcRunTime();
 
-		perror("Failed to create new process\n");
-		//break;
-	}
-	else if (pid == 0){
+	int i = 0;
+	while (i++ < 3) {
 
-		printf("UPROC Created: %d\n", getpid());
-		execl("uprocess", "uprocess", NULL); 
-	}
-	else{
+		unsigned long temp = 0;
+		unsigned long l_sec = 0;
+		unsigned long l_nano = 0;
 		
-		printf("Program finished");
-		//while(1); // jsut using to stall for right now. 
+		temp = launchTime();
+		//printf("temp: %ld\n", temp);
+		if (temp >= 1000000000) {
+			l_sec = temp / 1000000000;
+			l_nano = temp - (l_sec * 1000000000);
+		}
+		else {
+			l_nano = temp;
+		}
+		//printf("***sec: %ld, nano: %ld\n\n", l_sec, l_nano);
+		if (temp >= 1000000000) {	
+			sleep(2);
+		}
+		else {
+			sleep(l_sec);
+			sleep(2);
+			//printf("***sleeping for %ld seconds and %ld nanoseconds\n\n", l_sec, l_nano);
+		}
+		createProcess();
+		sleep(1);
+		testSync();
+	
 	}
+	
 
 	//deinit_shared_data();
 	//shmdt(shdata);
 	//shmctl(shmid, IPC_RMID, NULL);
 
 	printf("oss done\n");
-
-	exit(-1);;
+	exit(-1);
 }
 
 
@@ -173,6 +194,8 @@ void initializeMessageQueue() {
 	if (msg_id == -1) {
 		printf("Error creating queue\n");
 	}
+
+	ossClock();
 }
 
 
@@ -192,19 +215,108 @@ int deinit_shared_data() {
 	return 0;
 }
 
+pid_t createProcess(){
 
+	pid_t pid; 
+						
+	pid = fork();
+	if (pid == -1){
 
+		perror("Failed to create new process\n");
+		//break;
+	}
+	else if (pid == 0){
 
+		printf("UPROC Created: %d\n", getpid());
+		execl("uprocess", "uprocess", NULL); 
+		exit(-1);
+	}
+	else{
+		
+		sleep(1);
 
-
-void createProcess(){
-
+	}
 }
 
 void testSync() {
+	
+	struct msgbuf sndmsg;
 
+	sndmsg.mtype = MSG_SEND_UPROC;
+	strcpy(sndmsg.mtext, "foo\n");
+	if (msgsnd(msg_id, (void*)&sndmsg, MAX_TEXT, 0) ==-1) {
+	}
+
+	printf("oss msg sent\n");
+	sleep(1);
+	msgrcv(msg_id, (void *)&sndmsg, MAX_TEXT, MSG_RECV_OSS, 0);
+	printf("oss msg received: %s\n", sndmsg.mtext);
 
 }
+
+unsigned long launchTime() {
+
+	srand(time(NULL));
+	unsigned long launch_nano = rand() % maxTimeBetweenNewProcsNS + 1;
+	unsigned long launch_sec = rand() % maxTimeBetweenNewProcsSecs + 1;
+
+	unsigned long launchTime = launch_nano + (launch_sec * 1000000000);
+
+	return launchTime;
+}
+
+void ossClock() {
+	// set up initial clock values operated by oss
+	shm_data->ossec = 0;
+	shm_data->osnano = 0;
+
+}
+
+void addToQueue() {
+
+	// determine which queue to add process to
+}
+
+void evaluateQueue() {
+
+		// determine which to schedule next
+		//		- how long in system
+		//		- how long in blocked queue
+		//		- which are CPU and I/O
+}
+
+void scheduleProc() {
+
+		// schedule a process to run
+}
+
+void updateClock(int sec, int nano) {
+
+	
+	// update oss clock to reflect new time
+	shm_data->ossec += sec;
+
+	if (nano > 1000000000) {
+		int temp = launchTime();
+		shm_data->ossec += temp / 1000000000;
+		shm_data->osnano = temp - (sec * 1000000000);
+	}
+	else {
+		shm_data->osnano += nano;
+	}
+}
+
+void initProcRunTime() {
+
+	srand(time(NULL));
+
+	shm_data->osRunSec = rand() % 5 + 1;
+	shm_data->osRunNano = rand() % 1000000000 + 1;
+
+}
+
+
+
 
 
 

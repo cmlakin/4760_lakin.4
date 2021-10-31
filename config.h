@@ -28,6 +28,8 @@
 #define PROCESSES 18
 #define LOG_FILENAME "oss.log"
 
+extern int running; // 0 is no process running, 1 if process running
+
 struct proc_ctrl_blck {
 
 	int id; // pid of uproc
@@ -53,7 +55,9 @@ struct shared_data {
 	// os simulated clock
 	int ossec;	// initial value for clock seconds
 	int osnano; // initial value for clock nanoseconds
-
+	int osRunSec;	// initial allowed runtime sec given to uproc
+	int osRunNano; // initial allowed runtime nano given to uproc
+	
 	// process table
 	struct proc_table ptab;
 };
