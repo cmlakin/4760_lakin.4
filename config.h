@@ -35,7 +35,7 @@ extern int running; // 0 is no process running, 1 if process running
 struct proc_ctrl_blck {
 
 	int id; // pid of uproc
-	
+	int loc_id;
 	int ptype; // 0 - CPU, 1 - I/O
 	int operation;
 	int startsec;
@@ -49,7 +49,7 @@ struct proc_ctrl_blck {
 
 struct proc_table {
 
-	struct proc_ctrl_blck pcb[18];
+	struct proc_ctrl_blck pcb[17];
 };
 
 // shared memory

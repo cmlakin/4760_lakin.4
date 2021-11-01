@@ -22,10 +22,11 @@ void operationChoice();
 
 int main (int argc, char ** argv){
 
-	printf("In uprocess\n");
-
+	//printf("In uprocess\n");
 
   uprocInitialize();
+	pickType();
+	operationChoice();
 	uprocFinished();
 }
 
@@ -33,7 +34,7 @@ int main (int argc, char ** argv){
 void uprocInitialize(){
 
 // TODO wait for message from oss
-	printf("Initializing user process: %d\n", getpid());
+	//printf("Initializing user process: %d\n", getpid());
 
 	key_t sndkey = ftok(FTOK_BASE, FTOK_MSG);
 
@@ -46,7 +47,7 @@ void uprocInitialize(){
 	msg_id=msgget(sndkey, 0666 | IPC_CREAT);
 
 	msgrcv(msg_id, (void *)&sndmsg, BUFSIZ, MSG_RECV_UPROC, 0);
-	printf("proc msg received: %s\n", sndmsg.mtext);
+	//printf("proc msg received: %s\n", sndmsg.mtext);
 
 }
 
@@ -64,15 +65,41 @@ void uprocFinished() {
 		printf("Message not sent\n");
 	}
 
-	printf("uproc message sent\n");
-	printf("uproc done\n");
+	//printf("uproc message sent\n");
+	//printf("uproc done\n");
 	exit(0);
 }
 
 void pickType() {
 
 // TODO determine % of how many can be I/O bound and CPU processes
-// TODO pick random number to determine if I/O bound (1) or CPU (0)
+// counters not working right
+
+	// type counters
+	static int ioTypeCount = 0;
+	static int cpuTypeCount = 0;
+	
+	// pick type CPU: 0, I/O: 1
+	srand(time(NULL));
+	int typeChoice = rand() % 2;;
+	
+	//pcb->ptype = typeChoice;
+
+	if(typeChoice == 0){
+		cpuTypeCount++;
+		if ((cpuTypeCount % 3) ==  0){
+			typeChoice = 1;
+		}
+		//printf("cpuTypeCount: %i\n", cpuTypeCount);
+	}
+
+	if (typeChoice == 1){
+		ioTypeCount++;
+		//printf("ioCount: %i\n", ioTypeCount);
+	}
+
+
+	//printf("uproc Choice: %i\n", typeChoice);
 }
 
 void operationChoice() {
@@ -81,6 +108,13 @@ void operationChoice() {
 // 		0 - use all time allowed (higher chance for CPU)
 // 		1 - terminate (chance of this option should be low)
 // 		2 - use part of time (higher chance for I/O bound)
+
+	srand(time(NULL));
+	int opChoice = rand() % 3;
+
+	//pcb->operation = opChoice;
+
+	//printf("opchoice: %d\n", opChoice);
 
 }
 

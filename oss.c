@@ -1,7 +1,6 @@
 #include "config.h"
 #include <stdio.h>
 #include <sys/ipc.h>
-#include <sys/mman.h>
 #include <sys/shm.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -12,6 +11,8 @@
 #include <string.h>
 #include <time.h>
 #include <sys/fcntl.h>
+#include <stdbool.h>
+#include <sys/mman.h>
 
 // shared memory
 // 		/* own simulated time maintained by os - otime: only oss changes clock */
@@ -37,7 +38,10 @@
 
 // TODO send msg to uprocess and let it know how much time it has to run
 
-// TODO random time between launching a new process
+#define WORDSIZE 32
+#define BITS_WS 5
+#define MASK 0x1f
+
 const unsigned long maxTimeBetweenNewProcsNS = 1000000000;
 const int maxTimeBetweenNewProcsSecs = 2;
 
@@ -49,6 +53,8 @@ static struct shared_data * shm_data = NULL; // shared memory pointer
 //static char FTOK_BASE[PATH_MAX];
 
 static int msg_id = -1;
+
+int g_bitVector = 0;
 
 void processCommandLine(int, char **);
 void initialize();
@@ -67,8 +73,21 @@ void initProcRunTime();
 void initializeProcTable();
 void logStatistics(const char *);
 void deinitSharedMemory();
+//int initBit(int, int);
+void setBit(int);
+bool bitIsSet(int);
+void clearBit(int);
 
 int main(int argc, char ** argv){
+
+	int b = 2;
+
+	setBit(b);
+	printf("word is %04x is set %d\n", g_bitVector, b);
+	bitIsSet(b);
+	clearBit(b);
+	printf("word is %04x is set %d\n", g_bitVector, bitIsSet(b));
+
 
 	processCommandLine(argc, argv);
 	initialize();
@@ -76,12 +95,12 @@ int main(int argc, char ** argv){
 
 	//shm_data->local_pid = 0;
 	int i = 0;
-	while (i++ < 2) {
-		
+	while (i++ < 1) {
+
 		unsigned long temp = 0;
 		unsigned long l_sec = 0;
 		unsigned long l_nano = 0;
-		
+
 		temp = launchTime();
 		//printf("temp: %ld\n", temp);
 		if (temp >= 1000000000) {
@@ -92,7 +111,7 @@ int main(int argc, char ** argv){
 			l_nano = temp;
 		}
 		//printf("***sec: %ld, nano: %ld\n\n", l_sec, l_nano);
-
+		
 		if (l_sec == 0) {
 			sleep(2);
 		}
@@ -156,7 +175,7 @@ void initializeSharedMemory() {
 		perror(perror_buf);
 		//return -1;
 	}
-	
+
 	ossClock();
 }
 
@@ -179,8 +198,29 @@ void initializeMessageQueue() {
 
 }
 
+int findAvailablePcb(void) {
+	int i;
+	for(i = 0; i < PROCESSES; i++) {
+		if(!bitIsSet(i)) {
+			return i;
+		}
+	}
+	return -1;
+}
 
 pid_t createProcess(){
+	int pcbIndex = findAvailablePcb();
+
+	if(pcbIndex == -1) {
+		printf("createProcess: no free pcbs\n");
+		return -1;
+	}
+	printf("createProcess: available pcb %d\n", pcbIndex);
+	setBit(pcbIndex);
+	//return -1;
+
+	((struct shared_data *) shm_data)->ptab.pcb[pcbIndex].id = pcbIndex * 1000 
+			+ shm_data->local_pid++;
 
 	pid_t pid;
 	pid = fork();
@@ -188,16 +228,17 @@ pid_t createProcess(){
 	if (pid == -1) {
 		perror("Failed to create new process\n");
 		//break;
-	} 
+	}
 	else if (pid == 0) {
-		printf("UPROC Created: %d\n", getpid());
-		//shm_data->local_pid += 1;
+		//printf("UPROC Created: %d\n", getpid());
+		shm_data->local_pid += 1;
+		//printf("local_pid %d\n", shm_data->local_pid);
 		execl("uprocess", "uprocess", NULL);
 		exit(-1);
-	} 
+	}
 	else{
 	}
-	
+
 	char logbuf[200];
 	//printf("pid: %i\n", getpid());
 	snprintf(logbuf, sizeof(logbuf), "Generating process with PID %i\n", pid);
@@ -212,10 +253,10 @@ void testSync() {
 	if (msgsnd(msg_id, (void *)&sndmsg, MAX_TEXT, 0) == -1) {
 	}
 
-	printf("oss message sent\n");
+	//printf("oss message sent\n");
 	sleep(1);
 	msgrcv(msg_id, (void *)&sndmsg, MAX_TEXT, MSG_RECV_OSS, 0);
-	printf("oss msg received: %s\n", sndmsg.mtext);
+	//printf("oss msg received: %s\n", sndmsg.mtext);
 }
 
 void processCommandLine(int argc, char ** argv) {
@@ -261,7 +302,7 @@ unsigned long launchTime() {
 
 
 void ossClock() {
-	
+
 	// set up initial clock values operated by oss
 	shm_data->ossec = 0;
 	shm_data->osnano = 0;
@@ -324,14 +365,14 @@ void logStatistics(const char * string_buf) {
 	int fid;
 
 	fid = open(LOG_FILENAME, O_RDWR | O_APPEND | O_CREAT, S_IRUSR | S_IWUSR);
-	
+
 	if (fid == -1) {
 
 		snprintf(perror_buf, sizeof(perror_buf), "%s: open: ", perror_arg0);
 		perror(perror_buf);
 	}
 	else {
-		printf("%s", string_buf);
+		//printf("%s", string_buf);
 		write(fid, (void *) string_buf, strlen(string_buf));
 		close(fid);
 	}
@@ -341,21 +382,54 @@ void logStatistics(const char * string_buf) {
 
 void deinitSharedMemory() {
 
+	shmctl(shm_id, IPC_RMID, NULL);
+	msgctl(msg_id, IPC_RMID, NULL);
+	
 	if (shmdt(shm_data) == -1) {
 
 		snprintf(perror_buf, sizeof(perror_buf), "%s: shmdt: ", perror_arg0);
 		perror(perror_buf);
 	}
 
-	shmctl(shm_id, IPC_RMID, NULL);
-	msgctl(msg_id, IPC_RMID, NULL);
-
-/*	if (shm_unlink(FTOK_BASE) == -1) {
-
-		snprintf(perror_buf, sizeof(perror_buf), "%s: unlink: ", perror_arg0);
-		perror(perror_buf);
-	}
-*/
 }
 
 
+/*int initBit(int g_bitVector, int val) {
+
+	g_bitVector = calloc(val/WORDSIZE +1, sizeof(int));
+
+	return g_bitVector != 0; // will return 1
+
+}
+*/
+
+void setBit(int b) {
+	g_bitVector |= (1 << b);
+}
+
+// test if int i is set in bv
+bool bitIsSet(int b) {
+	return (g_bitVector & (1 << b)) != 0;
+}
+
+void clearBit(int b) {
+
+	g_bitVector &= ~(1 << b);
+}
+
+/*
+void pcbInit(int loc_p, struct proc_ctrl_blck * init, int pid) {
+
+	init->id = pid;
+	init->loc_id = loc_p;
+	init->ptype = 0;
+	init->operation = 0;
+	init->startsec = 0;
+	init->startnano = 0;
+	init->runsec = 0;
+	init->runnano = 0;
+	init->totalsec = 0;
+	init->totalnano = 0;
+	init->pqueue = 0;
+
+} */
