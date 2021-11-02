@@ -13,25 +13,12 @@
 #include <sys/fcntl.h>
 #include <stdbool.h>
 
+#include "queue.h"
+
 // shared memory
 // 		/* own simulated time maintained by os - otime: only oss changes clock */
 // 		clock: int seconds, int nano
 //
-// 		/* priority queues */
-// 		queue1 - high priority
-// 		queue2 - low priority
-// 		queue3 - blocked
-//
-// 		/* process table - ptable: only 18 entries */
-//
-// 		/* process control block - pcb: max of 18 */
-//		keep track of statistics:
-//				- pid
-//				- type of process (will determine priority)
-//				- time started
-//				- how long it ran for
-//				- time finished
-//				- what queue it was put into
 
 // TODO randomly launch new process
 
@@ -55,6 +42,8 @@ static int msg_id = -1;
 
 int g_bitVector = 0;
 
+pid_t pid;
+
 void processCommandLine(int, char **);
 void initialize();
 void initializeSharedMemory();
@@ -77,8 +66,30 @@ void setBit(int);
 bool bitIsSet(int);
 void clearBit(int);
 void runTime();
+void bail();
+void sigHandler(const int);
+int initializeSig();
 
 int main(int argc, char ** argv){
+	// PCB one;
+	// PCB two;
+	// PCB three;
+	//
+	// one.id = 1;
+	// two.id = 2;
+	// three.id = 3;
+	//
+	// queueCreate();
+	// queuePush(LowPriority, &one);
+	// queuePush(LowPriority, &two);
+	// queueDump(LowPriority);
+	// queueShift(LowPriority);
+	// queuePush(LowPriority, &three);
+	// queueDump(LowPriority);
+	// queueShift(LowPriority);
+	// queueDump(LowPriority);
+	// exit(0);
+
 
 	int b = 17;
 
@@ -94,6 +105,8 @@ int main(int argc, char ** argv){
 	//shm_data->local_pid = 0;
 	int i = 0;
 	while (i++ < 5) {
+
+		initializeSig();
 
 		unsigned long temp = 0;
 		unsigned long l_sec = 0;
@@ -206,7 +219,6 @@ void initializeMessageQueue() {
 int findAvailablePcb(void) {
 	int i;
 	for(i = 0; i < PROCESSES; i++) {
-
 		if(!bitIsSet(i)) {
 			return i;
 		}
@@ -234,7 +246,7 @@ pid_t createProcess(){
 
 	runTime();
 
-	pid_t pid;
+	//pid_t pid;
 	pid = fork();
 
 	if (pid == -1) {
@@ -437,19 +449,60 @@ void clearBit(int b) {
 	g_bitVector &= ~(1 << b);
 }
 
-/*
-void pcbInit(int loc_p, struct proc_ctrl_blck * init, int pid) {
+void doSigHandler(int sig) {
 
-	init->id = pid;
-	init->loc_id = loc_p;
-	init->ptype = 0;
-	init->operation = 0;
-	init->startsec = 0;
-	init->startnano = 0;
-	init->runsec = 0;
-	init->runnano = 0;
-	init->totalsec = 0;
-	init->totalnano = 0;
-	init->pqueue = 0;
+	if (sig == SIGTERM) {
+		// kill child process - reconfig to work with current code
+	  kill(getpid(), SIGKILL); // resend to child
+	}
+}
 
-} */
+void bail() {
+	kill(0, SIGTERM);
+	deinitSharedMemory();
+	exit(0);
+}
+
+
+void sigHandler(const int sig) {
+	sigset_t mask, oldmask;
+
+	sigfillset(&mask);
+
+	// block all signals
+	sigprocmask(SIG_SETMASK, &mask, &oldmask);
+
+	if (sig == SIGINT) {
+		printf("oss[%d]: Ctrl-C received\n", getpid());
+		bail();
+	}
+	else if (sig == SIGALRM) {
+		printf("oss[%d]: Alarm raised\n", getpid());
+		bail();
+	}
+
+	sigprocmask(SIG_SETMASK, &oldmask, NULL);
+}
+
+int initializeSig() {
+
+	struct sigaction sa;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask); // ignore next signals
+
+	if(sigaction(SIGTERM, &sa, NULL) == -1) {
+		perror("sigaction");
+		return -1;
+	}
+
+	// alarm and Ctrl-C(SIGINT) have to be handled
+	sa.sa_handler = sigHandler;
+	if ((sigaction(SIGALRM, &sa, NULL) == -1) ||
+			(sigaction(SIGINT, &sa, NULL) == -1)) {
+				perror("sigaction");
+				return -1;
+	}
+
+	alarm(ALARM_TIME);
+	return 0;
+}

@@ -5,13 +5,17 @@ CFLAGS= -g -Wall
 
 all: oss uprocess
 
-oss: oss.o scheduler.o
-	$(GCC) $(CFLAGS) oss.o scheduler.o -o oss
+clean:
+	rm *.o oss uprocess
 
-oss.o: oss.c
+oss: oss.o scheduler.o queue.o
+	$(GCC) $(CFLAGS) oss.o scheduler.o queue.o -o oss
+
+oss.o: oss.c config.h
 	$(GCC) $(CFLAGS) -c oss.c
 
 scheduler.o: scheduler.c
+
 	$(GCC) $(CFLAGS) -c scheduler.c
 
 uprocess: uprocess.o
@@ -20,6 +24,5 @@ uprocess: uprocess.o
 uprocess.o: uprocess.c
 	$(GCC) $(CFLAGS) -c uprocess.c
 
-clean:
-	rm *.o oss uprocess
-
+queue.o: queue.c queue.h
+	$(GCC)  $(CFLAGS) -c queue.c

@@ -16,6 +16,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#define ALARM_TIME 100
 
 #define FTOK_SHM 1
 #define FTOK_MSG 2
@@ -34,7 +35,7 @@ extern int running; // 0 is no process running, 1 if process running
 
 static struct shared_data * shm_data = NULL;
 
-struct proc_ctrl_blck {
+typedef struct proc_ctrl_blck {
 
 	int id; // pid of uproc
 	int loc_id;
@@ -47,7 +48,7 @@ struct proc_ctrl_blck {
 	int donesec;
 	int donenano;
 	int pqueue; // hold value of priority queue assigned
-};
+} PCB;
 
 struct proc_table {
 
@@ -89,13 +90,6 @@ struct msgbuf {
 };
 
 
-/* TODO not sure what to put in here yet.
- * Do I need a separte queue for each priority/blocked? */
-
-struct queue {
-
-
-};
 
 // TODO need to check if queue is full/empty
 // TODO have some time that will allow blocked queue to be
