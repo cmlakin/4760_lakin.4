@@ -32,6 +32,8 @@
 
 extern int running; // 0 is no process running, 1 if process running
 
+static struct shared_data * shm_data = NULL;
+
 struct proc_ctrl_blck {
 
 	int id; // pid of uproc
@@ -56,6 +58,10 @@ struct proc_table {
 struct shared_data {
 
 	int local_pid;
+	int ioCount;
+	int cpuCount;
+	int type;
+	int op;
 
 	// os simulated clock
 	int ossec;	// initial value for clock seconds
