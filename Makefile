@@ -3,15 +3,15 @@
 GCC= gcc
 CFLAGS= -g -Wall
 
-all: oss uprocess
+all: oss uprocess test
 
 clean:
-	rm *.o oss uprocess
+	rm *.o oss uprocess test
 
-oss: oss.o scheduler.o queue.o
-	$(GCC) $(CFLAGS) oss.o scheduler.o queue.o -o oss
+oss: oss.o scheduler.o queue.o osclock.o
+	$(GCC) $(CFLAGS) oss.o scheduler.o queue.o osclock.o -o oss
 
-oss.o: oss.c config.h
+oss.o: oss.c oss.h config.h osclock.h 
 	$(GCC) $(CFLAGS) -c oss.c
 
 scheduler.o: scheduler.c
@@ -26,3 +26,15 @@ uprocess.o: uprocess.c
 
 queue.o: queue.c queue.h
 	$(GCC)  $(CFLAGS) -c queue.c
+
+blocking.o: blocking.c blocking.h
+	$(GCC)  $(CFLAGS) -c blocking.c
+
+osclock.o: osclock.c osclock.h
+	$(GCC)  $(CFLAGS) -c osclock.c
+
+test.o: test.c config.h
+	$(GCC) $(CFLAGS) -c test.c
+
+test: test.o scheduler.o queue.o osclock.o
+	$(GCC) $(CFLAGS) test.o scheduler.o queue.o osclock.o -o test

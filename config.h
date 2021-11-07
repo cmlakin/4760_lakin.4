@@ -31,8 +31,27 @@
 #define LOG_FILENAME "oss.log"
 
 
-extern int running; // 0 is no process running, 1 if process running
+#define PT_IO_BOUND  0x0001
+#define PT_CPU_BOUND 0x0002
+#define PT_USE_TIME  0x0004
+#define PT_BLOCK     0x0008
+#define PT_TERMINATE 0x0010
 
+#define PROB_IO			30		// 30% of the time IO bound
+#define PROB_CPU		70		// 70% of the time CPU bound
+#define PROB_TERMINATE 	5		// 5% of the time terminate
+#define PROB_IO_BLOCK	80		// 75% of the time block if IO bound (80 - 5 = 75)
+#define PROB_CPU_BLOCK	30		// 25% of the time block if CPU bound
+
+enum queue_priority {
+    QT_HIGH_PRIORITY,
+    QT_LOW_PRIORITY
+};
+
+
+//extern int runningProc; // 0 is no process running, 1 if process running
+
+static int totalProcesses = 0;
 static struct shared_data * shm_data = NULL;
 
 typedef struct proc_ctrl_blck {
@@ -40,14 +59,19 @@ typedef struct proc_ctrl_blck {
 	int id; // pid of uproc
 	int loc_id;
 	int ptype; // 0 - CPU, 1 - I/O
-	int operation;
-	int startsec;
-	int startnano;
+	int operation; // used time, blocked, terminated
+	//int startsec;
+	//int startnano;
 	int runsec;
 	int runnano;
-	int donesec;
-	int donenano;
+	int totalsec;
+	int totalnano;
 	int pqueue; // hold value of priority queue assigned
+	//
+	// used only for testing
+	//
+	int testsec;
+	int testnano;
 } PCB;
 
 struct proc_table {
@@ -62,13 +86,15 @@ struct shared_data {
 	int ioCount;
 	int cpuCount;
 	int type;
-	int op;
+	//int op;
 
 	// os simulated clock
-	int ossec;	// initial value for clock seconds
-	int osnano; // initial value for clock nanoseconds
-	int osRunSec;	// initial allowed runtime sec given to uproc
-	int osRunNano; // initial allowed runtime nano given to uproc
+	int osSec;	// initial value for clock seconds
+	int osNano; // initial value for clock nanoseconds
+	int osRunSec;	// allowed runtime sec given to uproc
+	int osRunNano; // allowed runtime nano given to uproc
+	int launchSec;
+	int launchNano;
 
 	// process table
 	struct proc_table ptab;
@@ -84,25 +110,13 @@ extern int assignednano;
 #define MAX_TEXT 50
 
 // message buffer
-struct msgbuf {
+typedef struct ipcmsg {
 	long mtype;
 	char mtext[MAX_TEXT];
-};
 
+	int ossid;
+	int pRunSec;
+	int pRunNano;
+	int pOperation;
 
-
-// TODO need to check if queue is full/empty
-// TODO have some time that will allow blocked queue to be
-// 		reprioritized.
-
-// TODO msgbuffer oss to uprocess
-// 			- id
-// 			- assigned sec
-// 			- assigned nano
-
-
-// TODO msgbuffer  uprocess to oss
-// 			- id
-// 			- type (CPU/IO)
-// 			- runsec
-// 			- runnano
+} ipcmsg;
