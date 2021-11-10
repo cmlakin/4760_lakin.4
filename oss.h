@@ -21,7 +21,7 @@ void dispatch();
 void createMessageQueue();
 void launchNewProc();
 void ossClock();
-void addToQueue(int);
+void addToQueue(PCB *);
 void dispatchUpdateClock();
 void updateClock(int, int);
 void logStatistics(const char *);

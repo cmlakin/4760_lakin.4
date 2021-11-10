@@ -30,6 +30,8 @@ priorityItem * newItem(PCB * pcb) {
 }
 
 void enqueueLow(PCB * pcb) {
+    printf("enqueue low %d\n", pcb->local_pid);
+
     queuePush(QT_LOW_PRIORITY, pcb);
 }
 
@@ -38,6 +40,7 @@ PCB *dequeueLow() {
 }
 
 void enqueueHigh(PCB * pcb) {
+    printf("enqueue high %d\n", pcb->local_pid);
     queuePush(QT_HIGH_PRIORITY, pcb);
 }
 
@@ -68,6 +71,11 @@ PCB * queueShift(int which) {
         return NULL;
     }
     q->head = q->head->next;
+    if(q->head == NULL) {
+        q->tail = NULL;
+    }
+
+    printf("dequeued  %d %d\n", which, (int)item);
 
     return item->pcb;
 }
@@ -75,9 +83,8 @@ PCB * queueShift(int which) {
 void queuePush(int which, PCB * pcb) {
     priorityQueue * q = getQueue(which);
     priorityItem  * new = newItem(pcb);
-    // printf("created head %x tail %lx\n", (int)lowPriority.head, (long)lowPriority.tail);
 
-    // new->pcb = pcb;
+    new->pcb = pcb;
     // printf("push head %x tail %lx\n", (int)q->head, (long)q->tail);
 
     if(q->tail == NULL) {
@@ -97,7 +104,7 @@ void queueDump(int which, char * indent) {
 
 
     while(h != NULL) {
-        printf("%squeue %d\n", indent, (int)h->pcb->id);
+        printf("%squeue %d\n", indent, (int)h->pcb->local_pid);
         h = h->next;
     }
 
@@ -105,6 +112,7 @@ void queueDump(int which, char * indent) {
 
 
 void enqueueBlocking(PCB * pcb, int ossec, int ossnano) {
+    printf("*** blocking ***\n");
     // generate r.s seconds where r and s are random numbers with range
     // r <= {0...5} and s <= {0...1000}
     blockingItem * current = queues.blocking.head ;

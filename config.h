@@ -33,19 +33,20 @@
 
 #define PT_IO_BOUND  0x0001
 #define PT_CPU_BOUND 0x0002
-#define PT_USE_TIME  0x0004
-#define PT_BLOCK     0x0008
+#define PT_BLOCK     0x0004
+#define PT_USE_TIME  0x0008
 #define PT_TERMINATE 0x0010
 
 #define PROB_IO			30		// 30% of the time IO bound
-#define PROB_CPU		70		// 70% of the time CPU bound
-#define PROB_TERMINATE 	5		// 5% of the time terminate
-#define PROB_IO_BLOCK	80		// 75% of the time block if IO bound (80 - 5 = 75)
-#define PROB_CPU_BLOCK	30		// 25% of the time block if CPU bound
+#define PROB_CPU		100		// 70% of the time CPU bound
+#define PROB_TERMINATE 	10		// 5% of the time terminate
+#define PROB_CB_IU	40		// CPU block or IO use all 35%
+#define PROB_IB_CA	100		// IO block or CPU use all 60% 
+
 
 enum queue_priority {
-    QT_HIGH_PRIORITY,
-    QT_LOW_PRIORITY
+    QT_HIGH_PRIORITY = 100,
+    QT_LOW_PRIORITY = 101
 };
 
 
@@ -56,8 +57,8 @@ static struct shared_data * shm_data = NULL;
 
 typedef struct proc_ctrl_blck {
 
-	int id; // pid of uproc
-	int loc_id;
+	int pid;       // real pid of uproc
+	int local_pid;      //
 	int ptype; // 0 - CPU, 1 - I/O
 	int operation; // used time, blocked, terminated
 	//int startsec;

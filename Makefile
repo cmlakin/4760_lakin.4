@@ -8,15 +8,11 @@ all: oss uprocess test
 clean:
 	rm *.o oss uprocess test
 
-oss: oss.o scheduler.o queue.o osclock.o
-	$(GCC) $(CFLAGS) oss.o scheduler.o queue.o osclock.o -o oss
+oss: oss.o queue.o osclock.o
+	$(GCC) $(CFLAGS) oss.o queue.o osclock.o -o oss
 
 oss.o: oss.c oss.h config.h osclock.h 
 	$(GCC) $(CFLAGS) -c oss.c
-
-scheduler.o: scheduler.c
-
-	$(GCC) $(CFLAGS) -c scheduler.c
 
 uprocess: uprocess.o
 	$(GCC)  $(CFLAGS) uprocess.o -o uprocess
@@ -36,5 +32,5 @@ osclock.o: osclock.c osclock.h
 test.o: test.c config.h
 	$(GCC) $(CFLAGS) -c test.c
 
-test: test.o scheduler.o queue.o osclock.o
-	$(GCC) $(CFLAGS) test.o scheduler.o queue.o osclock.o -o test
+test: test.o queue.o osclock.o
+	$(GCC) $(CFLAGS) test.o queue.o osclock.o -o test
