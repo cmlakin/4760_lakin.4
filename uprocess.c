@@ -35,18 +35,15 @@ int main (int argc, char ** argv){
 	uprocInitialize();
 	attachSharedMemory();
 	ptype = getProcessType(id);
-	// printf( "uproc: type=%i\n", ptype);
 	updateSharedCounters(ptype);
-	// printf("uproc id %d ptype %d\n", id, ptype);
-	doit((long)id);
+	doit(id);
 	//uprocFinished(ptype);
 }
 
-void doit(long id) {
-	printf("in doit\n");
+void doit(int id) {
 	while(1) {
 		ipcmsg msg;
-		printf("msg_id %i uproc\n", msg_id);
+
 		if(msgrcv(msg_id, (void *)&msg, sizeof(ipcmsg), id + 1, 0) == -1) {
 			printf("error receving message\n");
 			exit(-1);

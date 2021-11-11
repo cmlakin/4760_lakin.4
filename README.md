@@ -6,6 +6,14 @@ Simulated Operating System
 
 github: https://github.com/cmlakin/4760_lakin.4.git 
 
+Problem running: It will go into an endless loop of the active process count. 
+	It was doing this in my system and I fixed it, but not sure why it is 
+	doing it again in here. I copied all of my files over. Not sure what is
+	going on with it. 
+
+	I did not get to the report. I started to do it but then had other debugging
+	that took priority. 
+
 Algorithm:
 	Type Choice:
 		IO 30%
@@ -57,3 +65,6 @@ Struggles:
 	gitHub. As time went on, I didn't do that as often as I should have.
 	I found myself not remembering exactly everything that I had worked on
 	or changed. Will be more mindful of this next time. 
+
+	It also helps to transfer the files over before pushing. 
+

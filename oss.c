@@ -44,26 +44,21 @@ void scheduler() {
 
 	foo = createProcess();
 
-	while(totalProcesses <= 50) {
-
-		printf("activeProcs %d\n", activeProcs);
+	while(totalProcesses < 50) {
+		
 		if (activeProcs < 18) {
-			// if ((osclock.seconds() >= (shm_data->launchSec)) &&
-			// 	((osclock.nanoseconds() >= (shm_data->launchNano)))) {
-			// 		printf("current %0d:%09d\n", osclock.seconds(), osclock.nanoseconds());
-			// 		printf("lanuch  %0d:%09d\n", shm_data->launchSec, shm_data->launchNano);
+			int create = osclock.seconds() > shm_data->launchSec;
 
+			if(!create && osclock.seconds()) {
+				create = osclock.seconds() > shm_data->launchSec && osclock.nanoseconds() >= shm_data->launchNano;
+			}
+			if(create) {
+				printf("current %0d:%09d\n", osclock.seconds(), osclock.nanoseconds());
+				printf("lanuch  %0d:%09d\n", shm_data->launchSec, shm_data->launchNano);
 				foo = createProcess();
 				launchNewProc();
-				// try to create new process
-				//foo = createProcess();
-				//totalProcesses++;
-			// }
+			}
 		}
-
-		// printf("current %0d:%09d\n", osclock.seconds(), osclock.nanoseconds());
-		// printf("lanuch  %0d:%09d\n", shm_data->launchSec, shm_data->launchNano);
-
 		// check blocked queue and move to new queue as procs are ready
 		while ((foo = queues.blocking.dequeue(osclock.seconds(), osclock.nanoseconds())) != NULL) {
 			queues.highPriority.enqueue(foo);
@@ -85,9 +80,10 @@ void scheduler() {
 			} else {
 			}
 		}
+		osclock.add(0,1000000);
 		//sleep(1);
 	}
-	printf("******************total processes = 50*********************\n");
+	printf("total processes = 50\n");
 	bail();
 }
 
@@ -146,10 +142,10 @@ void dispatch(PCB *pcb) {
 
 	// update pcb values (total time in system)
 	pcb->totalnano += shm_data->osRunNano;
-	
-	
+
+
 	dispatchUpdateClock();
-	
+
 	pcb->endSec = osclock.seconds();
 	pcb->endNano = osclock.nanoseconds();
 
@@ -478,5 +474,3 @@ int initializeSig() {
 	alarm(ALARM_TIME);
 	return 0;
 }
-
- 
