@@ -1,3 +1,5 @@
+#pragma once
+
 typedef struct ostime {
     int seconds;
     int nanoseconds;

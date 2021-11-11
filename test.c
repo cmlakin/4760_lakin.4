@@ -45,7 +45,7 @@ void testPriorityQueues() {
     two.pid = 2;
 
     queues.highPriority.enqueue(&one);
-    queues.highPriority.enqueue(&two);
+    // queues.highPriority.enqueue(&two);
 
     printf("queue has\n");
     queueDump(QT_HIGH_PRIORITY, "  ");

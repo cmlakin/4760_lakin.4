@@ -15,15 +15,22 @@
 #include "config.h"
 #include "queue.h"
 #include "osclock.h"
+#include "shm.h"
 #include "oss.h"
 
 int main(int argc, char ** argv){
 
+	unlink(LOG_FILENAME);
 	srand(getpid());
 
 	processCommandLine(argc, argv);
-
 	initialize();
+
+	if (totalProcesses == 0) {
+		launchNewProc();
+		osclock.add(shm_data->launchSec, shm_data->launchNano);
+	}
+
 
 	scheduler();
 
@@ -36,20 +43,21 @@ void scheduler() {
 	PCB * foo;
 
 	foo = createProcess();
-	totalProcesses++;
 
-	while(1) {
+	while(totalProcesses <= 50) {
 
-		if (totalProcesses < 10) {
+		printf("activeProcs %d\n", activeProcs);
+		if (activeProcs < 18) {
 			// if ((osclock.seconds() >= (shm_data->launchSec)) &&
 			// 	((osclock.nanoseconds() >= (shm_data->launchNano)))) {
 			// 		printf("current %0d:%09d\n", osclock.seconds(), osclock.nanoseconds());
 			// 		printf("lanuch  %0d:%09d\n", shm_data->launchSec, shm_data->launchNano);
 
+				foo = createProcess();
 				launchNewProc();
 				// try to create new process
-				foo = createProcess();
-				totalProcesses++;
+				//foo = createProcess();
+				//totalProcesses++;
 			// }
 		}
 
@@ -57,29 +65,34 @@ void scheduler() {
 		// printf("lanuch  %0d:%09d\n", shm_data->launchSec, shm_data->launchNano);
 
 		// check blocked queue and move to new queue as procs are ready
-		while ((queues.blocking.dequeue(osclock.seconds(), osclock.nanoseconds())) != NULL) {
+		while ((foo = queues.blocking.dequeue(osclock.seconds(), osclock.nanoseconds())) != NULL) {
 			queues.highPriority.enqueue(foo);
 			addToQueue(foo);
 		}
 		// check high queue and dispactch first process, until all are finished
 		if ((foo = queues.highPriority.dequeue()) != NULL) {
 			dispatch(foo);
-			addToQueue(foo);
+			if(foo->operation != PT_TERMINATE) {
+				addToQueue(foo);
+			} else {
+			}
 		}
 		// check low queue and dispatch until cycled through all
 		if ((foo = queues.lowPriority.dequeue()) != NULL) {
 			dispatch(foo);
-			addToQueue(foo);
+			if(foo->operation != PT_TERMINATE) {
+				addToQueue(foo);
+			} else {
+			}
 		}
-
-		sleep(1);
+		//sleep(1);
 	}
-
-	addToQueue(foo);
+	printf("******************total processes = 50*********************\n");
+	bail();
 }
 
 void dispatch(PCB *pcb) {
-	printf("oss: dispatch %d\n", pcb->local_pid);
+	printf("oss: dispatch %d\n", pcb->local_pid & 0xff);
 
 	// create time slice for process
 	timeSlice();
@@ -89,59 +102,72 @@ void dispatch(PCB *pcb) {
 	struct ipcmsg recv;
 
 	memset((void *)&send, 0, sizeof(send));
-	send.mtype = pcb->local_pid;
-	send.pRunSec = shm_data->osRunSec;
+	send.mtype = (pcb->local_pid & 0xff) + 1;
 	send.pRunNano = shm_data->osRunNano;
-	send.ossid = 55;
+	send.ossid = send.mtype;
 	strcpy(send.mtext, "foo");
 
 	// printf("oss: dispatch local_pid %i from queue %i at time %i:%09i\n", pcb->local_pid, pcb->ptype,
 	// 	osclock.seconds(), osclock.nanoseconds());
-	
-	snprintf(logbuf, sizeof(logbuf), "OSS: Dispatching process with PID %i from queue %i at time %i:%i\n",
-		pcb->local_pid, pcb->ptype, osclock.seconds(), osclock.nanoseconds());
+
+	osclock.add(0,1);
+	snprintf(logbuf, sizeof(logbuf), "OSS: Dispatching process with PID %i from queue %i at time %0d:%09d\n",
+		pcb->local_pid & 0xff, pcb->ptype, osclock.seconds(), osclock.nanoseconds());
 	logStatistics(logbuf);
-	//
-	// TODO this can fail with errno 22 if receiver not ready!
-	//
-	// sleep(1);
+
+	pcb->startsec = osclock.seconds();
+	pcb->startnano = osclock.nanoseconds();
 	while (msgsnd(msg_id, (void *)&send, sizeof(send), 0) == -1) {
 		printf("oss: msg not sent to %d error %d\n", (int)send.mtype, errno);
 		sleep(1);
 	}
-	// printf("oss: msg sent to %d\n", (int)send.mtype);
+
+	printf("oss: msg sent to %d\n", (int)send.mtype);
+	printf("msg_id %i\n", msg_id);
 
 	printf("oss: waiting for msg\n");
 
-	while(msgrcv(msg_id, (void *)&recv, sizeof(recv), 55, 0) == -1) {
+	while(msgrcv(msg_id, (void *)&recv, sizeof(recv), send.ossid, 0) == -1) {
 		printf("oss: waiting for msg error %d\n", errno);
 	}
+
 	printf("oss msg received: %s\n", recv.mtext);
+	if(recv.pOperation == PT_TERMINATE) {
+		printf("oss PT_TERMINATE: %d\n", pcb->local_pid & 0xff);
+		clearBit(pcb->local_pid & 0xff);
+		activeProcs--;
+		allocatedProcs--;
+	}
+
+	pcb->operation = recv.pOperation;
 
 	// update clock with time run
-	shm_data->osRunSec = recv.pRunSec;
 	shm_data->osRunNano = recv.pRunNano;
 
 	// update pcb values (total time in system)
-	pcb->totalsec += shm_data->osRunSec;
 	pcb->totalnano += shm_data->osRunNano;
-
+	
+	
 	dispatchUpdateClock();
+	
+	pcb->endSec = osclock.seconds();
+	pcb->endNano = osclock.nanoseconds();
 
 	snprintf(logbuf, sizeof(logbuf),"OSS: Receiving that process with PID %i ran for %i nanoseconds\n",
-		shm_data->local_pid, shm_data->osRunNano);
+		pcb->local_pid & 0xff, shm_data->osRunNano);
 	logStatistics(logbuf);
 
-	if (recv.pRunSec < shm_data->osRunNano) {
+	if (recv.pRunNano < shm_data->osRunNano) {
 		snprintf(logbuf, sizeof(logbuf),"OSS: Process did not use its entire quantum\n");
 		logStatistics(logbuf);
 	}
-
-	//send info back to sheduler
 }
 
 PCB * createProcess() {
-	// printf("createProcess\n");
+	printf("createProcess\n");
+	activeProcs++;
+	totalProcesses++;
+
 	PCB *pcb;
 
 	// find available pcb and initialize first values
@@ -150,12 +176,11 @@ PCB * createProcess() {
 		printf("oss: createProcess: no free pcbs\n");
 		return NULL;
 	}
-	// printf("oss: createProcess: available pcb %d\n", pcbIndex);
+	printf("oss: createProcess: available pcb %d\n", pcbIndex);
 	setBit(pcbIndex);
+	allocatedProcs++;
 
 	pcb = &shm_data->ptab.pcb[pcbIndex];
-
-	pcb->local_pid = shm_data->local_pid++;
 
 	pid = pcb->pid = fork();
 
@@ -165,8 +190,20 @@ PCB * createProcess() {
 	} else if (pid == 0) {
 		char strbuf[16];
 
-		// printf("oss: local_pid %d\n", shm_data->local_pid - 1);
-		snprintf(strbuf, sizeof(strbuf), "%d", shm_data->local_pid - 1);
+		pcb->local_pid = shm_data->local_pid << 8 | pcbIndex;
+
+		printf("oss: local_pid %d\n",  pcb->local_pid & 0xff);
+		snprintf(strbuf, sizeof(strbuf), "%d", pcb->local_pid & 0xff);
+
+		osclock.add(0,1);
+		snprintf(logbuf, sizeof(logbuf),
+			"OSS: Generating process with PID %i and putting it in queue %i at time %0d:%09d\n",
+			pcb->local_pid & 0xff, pcb->ptype, osclock.seconds(), osclock.nanoseconds());
+
+		logStatistics(logbuf);
+
+		shm_data->local_pid++;
+
 		execl("uprocess", "uprocess", strbuf, NULL);
 		exit(-1);
 	} else {
@@ -175,10 +212,7 @@ PCB * createProcess() {
 	pcb->ptype = rand() % 100 < PROB_IO ? PT_IO_BOUND : PT_CPU_BOUND;
 	addToQueue(pcb);
 
-	snprintf(logbuf, sizeof(logbuf),
-		"OSS: Generating process with PID %i and putting it in queue %i at time %i:%i\n",
-		shm_data->local_pid, shm_data->ptab.pcb[pcbIndex].ptype, osclock.seconds(), osclock.nanoseconds());
-	logStatistics(logbuf);
+	osclock.add(0,1);
 	return pcb;
 }
 
@@ -228,7 +262,6 @@ void initializeSharedMemory() {
 		memset((void *)shm_data, 0, sizeof(struct shared_data));
 	}
 	shm_data->local_pid = 1;
-	shmctl(shm_id, IPC_RMID, NULL);
 }
 
 void initializeMessageQueue() {
@@ -309,7 +342,6 @@ void launchNewProc() {
 void timeSlice() {
 	int MAXINT = 1000000000;
 	//srand(time(NULL));
-	shm_data->osRunSec = rand() % 3;
 	shm_data->osRunNano = rand() % MAXINT;
 
 	// printf("time slice: osRunSec %i osRunNano %i\n", shm_data->osRunSec, shm_data->osRunNano);
@@ -324,12 +356,16 @@ void ossClock() {
 
 void addToQueue(PCB *pcb) {
 	if(pcb->ptype & PT_BLOCK) {
+					printf("add to queue block\n");
 		queues.blocking.enqueue(pcb, osclock.seconds(), osclock.nanoseconds());
 		pcb->pqueue = 3;
 	} else if (pcb->ptype & PT_IO_BOUND) {
+		printf("add to queue low priority\n");
 		queues.lowPriority.enqueue(pcb);
 		pcb->pqueue = 2;
 	} else {
+		printf("add to queue high priority\n");
+
 		queues.highPriority.enqueue(pcb);
 		pcb->pqueue = 1;
 	}
@@ -339,7 +375,7 @@ void addToQueue(PCB *pcb) {
 void dispatchUpdateClock() {
 	int dispNano = rand() % 500000000;
 	updateClock(0, dispNano);
-	printf("dispatchUpdateClock: %i:%i\n", osclock.seconds(), osclock.nanoseconds());
+	printf("oss: osclock %i:%i\n", osclock.seconds(), osclock.nanoseconds());
 	snprintf(logbuf, sizeof(logbuf),
 		"OSS: Time spent this dispatch was %i nanoseconds\n", dispNano);
 	logStatistics(logbuf);
@@ -348,12 +384,12 @@ void dispatchUpdateClock() {
 
 void updateClock(int sec, int nano) {
 
-	if (nano > 1000000000) {
+	if (nano >= 1000000000) {
 		osclock.add(sec + nano / 1000000000, nano % 1000000000);
 	} else {
 		osclock.add(sec, nano);
 	}
-	printf("updateClock: %i:%i\n", osclock.seconds(), osclock.nanoseconds());
+	//printf("updateClock: %i:%i\n", osclock.seconds(), osclock.nanoseconds());
 }
 
 void logStatistics(const char * string_buf) {
@@ -375,6 +411,7 @@ void deinitSharedMemory() {
 		snprintf(perror_buf, sizeof(perror_buf), "%s: shmdt: ", perror_arg0);
 		perror(perror_buf);
 	}
+	shmctl(shm_id, IPC_RMID, NULL);
 }
 
 void setBit(int b) {
@@ -412,12 +449,12 @@ void sigHandler(const int sig) {
 	sigprocmask(SIG_SETMASK, &mask, &oldmask);
 
 	if (sig == SIGINT) {
-			printf("oss[%d]: Ctrl-C received\n", getpid());
-			bail();
+		printf("oss[%d]: Ctrl-C received\n", getpid());
+		bail();
 	}
 	else if (sig == SIGALRM) {
-									printf("oss[%d]: Alarm raised\n", getpid());
-									bail();
+		printf("oss[%d]: Alarm raised\n", getpid());
+		bail();
 	}
 	sigprocmask(SIG_SETMASK, &oldmask, NULL);
 }
@@ -428,17 +465,18 @@ int initializeSig() {
 	sigemptyset(&sa.sa_mask); // ignore next signals
 
 	if(sigaction(SIGTERM, &sa, NULL) == -1) {
-									perror("sigaction");
-									return -1;
+		perror("sigaction");
+		return -1;
 	}
 
 	// alarm and Ctrl-C(SIGINT) have to be handled
 	sa.sa_handler = sigHandler;
-	if ((sigaction(SIGALRM, &sa, NULL) == -1) ||
-					(sigaction(SIGINT, &sa, NULL) == -1)) {
-									perror("sigaction");
-									return -1;
+	if ((sigaction(SIGALRM, &sa, NULL) == -1) ||	(sigaction(SIGINT, &sa, NULL) == -1)) {
+		perror("sigaction");
+		return -1;
 	}
 	alarm(ALARM_TIME);
 	return 0;
 }
+
+ 

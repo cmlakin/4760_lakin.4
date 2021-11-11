@@ -1,36 +1,49 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
+
+#include "config.h"
 #include "osclock.h"
+#include "shm.h"
+
+static shared_data * data;
 
 void set(int seconds, int nanoseconds) {
-    osclock.time.seconds = seconds;
-    osclock.time.nanoseconds = nanoseconds;
+    data->osclock.time.seconds = seconds;
+    data->osclock.time.nanoseconds = nanoseconds;
 }
 
 
 void add(int seconds, int nanoseconds) {
-    osclock.time.nanoseconds += nanoseconds;
+    data->osclock.time.nanoseconds += nanoseconds;
 
-    if(osclock.time.nanoseconds > 999999999) {
-        osclock.time.seconds += osclock.time.nanoseconds / 1000000000;
-        osclock.time.nanoseconds = osclock.time.nanoseconds % 1000000000;
+    if(data->osclock.time.nanoseconds > 999999999) {
+        data->osclock.time.seconds += data->osclock.time.nanoseconds / 1000000000;
+        data->osclock.time.nanoseconds = data->osclock.time.nanoseconds % 1000000000;
     }
-    osclock.time.seconds += seconds;
+    data->osclock.time.seconds += seconds;
 }
 
 void get(ostime *time) {
-    time->seconds = osclock.time.seconds;
-    time->nanoseconds = osclock.time.nanoseconds;
+    time->seconds = data->osclock.time.seconds;
+    time->nanoseconds = data->osclock.time.nanoseconds;
 }
 
 int seconds(void) {
-    return osclock.time.seconds;
+    return data->osclock.time.seconds;
 }
 int nanoseconds(void) {
-    return osclock.time.nanoseconds;
+    return data->osclock.time.nanoseconds;
 }
 
 void init() {
+    data = shmAttach();
+
+    if(data == NULL) {
+        printf("could not get shared data\n");
+    } else {
+        printf("clock got shared data\n");
+    }
     osclock.set = set;
     osclock.add = add;
     osclock.get = get;
@@ -38,20 +51,10 @@ void init() {
     osclock.nanoseconds = nanoseconds;
 }
 
-void foo() {
-    printf("foo\n");
-}
-
-int bar() {
-    printf("bar\n");
-    return 0;
-}
-
 void initSet(int seconds, int nanoseconds) {
     init();
     return set(seconds, nanoseconds);
 }
-
 
 void initAdd(int seconds, int nanoseconds) {
     init();

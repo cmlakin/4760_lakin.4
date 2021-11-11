@@ -1,3 +1,5 @@
+#pragma once
+
 #include <errno.h>
 #include <fcntl.h>
 #include <getopt.h>
@@ -15,6 +17,7 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
+#include "osclock.h"
 
 #define ALARM_TIME 100
 
@@ -41,8 +44,13 @@
 #define PROB_CPU		100		// 70% of the time CPU bound
 #define PROB_TERMINATE 	10		// 5% of the time terminate
 #define PROB_CB_IU	40		// CPU block or IO use all 35%
-#define PROB_IB_CA	100		// IO block or CPU use all 60% 
+#define PROB_IB_CA	100		// IO block or CPU use all 60%
 
+
+#define NEW_PROC_MAX_SECS 2
+#define NEW_PROC_MAX_NANO 1000000000
+
+#define MAX_TEXT 50
 
 enum queue_priority {
     QT_HIGH_PRIORITY = 100,
@@ -54,61 +62,6 @@ enum queue_priority {
 
 static int totalProcesses = 0;
 static struct shared_data * shm_data = NULL;
-
-typedef struct proc_ctrl_blck {
-
-	int pid;       // real pid of uproc
-	int local_pid;      //
-	int ptype; // 0 - CPU, 1 - I/O
-	int operation; // used time, blocked, terminated
-	//int startsec;
-	//int startnano;
-	int runsec;
-	int runnano;
-	int totalsec;
-	int totalnano;
-	int pqueue; // hold value of priority queue assigned
-	//
-	// used only for testing
-	//
-	int testsec;
-	int testnano;
-} PCB;
-
-struct proc_table {
-
-	struct proc_ctrl_blck pcb[17];
-};
-
-// shared memory
-struct shared_data {
-
-	int local_pid;
-	int ioCount;
-	int cpuCount;
-	int type;
-	//int op;
-
-	// os simulated clock
-	int osSec;	// initial value for clock seconds
-	int osNano; // initial value for clock nanoseconds
-	int osRunSec;	// allowed runtime sec given to uproc
-	int osRunNano; // allowed runtime nano given to uproc
-	int launchSec;
-	int launchNano;
-
-	// process table
-	struct proc_table ptab;
-};
-
-// time given to uproc from os for run time alloted
-extern int assignedsec;
-extern int assignednano;
-
-//extern const int QUEUE_ID = 1;
-//extern const int SHM_ID = 2;
-
-#define MAX_TEXT 50
 
 // message buffer
 typedef struct ipcmsg {

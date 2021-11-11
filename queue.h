@@ -1,3 +1,6 @@
+#pragma once
+#include "shm.h"
+
 //
 // priority queues items
 //

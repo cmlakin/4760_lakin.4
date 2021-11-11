@@ -1,0 +1,444 @@
+OSS: Dispatching process with PID 0 from queue 2 at time 1:000000079
+OSS: Generating process with PID 0 and putting it in queue 2 at time 1:000000077
+OSS: Time spent this dispatch was 272571320 nanoseconds
+OSS: Receiving that process with PID 0 ran for 641347957 nanoseconds
+OSS: Generating process with PID 1 and putting it in queue 2 at time 1:272571400
+OSS: Dispatching process with PID 1 from queue 2 at time 1:272571402
+OSS: Time spent this dispatch was 191468295 nanoseconds
+OSS: Generating process with PID 2 and putting it in queue 2 at time 1:272571403
+OSS: Receiving that process with PID 1 ran for 725969486 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 1:464039700
+OSS: Time spent this dispatch was 343939071 nanoseconds
+OSS: Receiving that process with PID 0 ran for 753348162 nanoseconds
+OSS: Generating process with PID 3 and putting it in queue 2 at time 1:807978772
+OSS: Dispatching process with PID 2 from queue 2 at time 1:807978774
+OSS: Time spent this dispatch was 86071317 nanoseconds
+OSS: Receiving that process with PID 2 ran for 968762844 nanoseconds
+OSS: Dispatching process with PID 1 from queue 2 at time 1:894050093
+OSS: Time spent this dispatch was 477468410 nanoseconds
+OSS: Receiving that process with PID 1 ran for 86083347 nanoseconds
+OSS: Dispatching process with PID 3 from queue 2 at time 2:371518505
+OSS: Time spent this dispatch was 106624402 nanoseconds
+OSS: Receiving that process with PID 3 ran for 770377157 nanoseconds
+OSS: Dispatching process with PID 0 from queue 1 at time 2:478142908
+OSS: Generating process with PID 4 and putting it in queue 2 at time 2:478142909
+OSS: Generating process with PID 5 and putting it in queue 2 at time 2:478142910
+OSS: Generating process with PID 6 and putting it in queue 1 at time 2:478142911
+OSS: Time spent this dispatch was 335094914 nanoseconds
+OSS: Receiving that process with PID 6 ran for 530370383 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 2:813237827
+OSS: Generating process with PID 7 and putting it in queue 2 at time 2:933659850
+OSS: Time spent this dispatch was 120422022 nanoseconds
+OSS: Receiving that process with PID 0 ran for 980168763 nanoseconds
+OSS: Dispatching process with PID 6 from queue 1 at time 2:933659851
+OSS: Time spent this dispatch was 84715789 nanoseconds
+OSS: Receiving that process with PID 6 ran for 31943333 nanoseconds
+OSS: Dispatching process with PID 4 from queue 2 at time 3:018375642
+OSS: Time spent this dispatch was 372751586 nanoseconds
+OSS: Receiving that process with PID 4 ran for 153876421 nanoseconds
+OSS: Dispatching process with PID 6 from queue 1 at time 3:391127229
+OSS: Generating process with PID 8 and putting it in queue 2 at time 3:391127230
+OSS: Time spent this dispatch was 497815493 nanoseconds
+OSS: Receiving that process with PID 6 ran for 113427634 nanoseconds
+OSS: Dispatching process with PID 2 from queue 2 at time 3:888942725
+OSS: Time spent this dispatch was 223491405 nanoseconds
+OSS: Receiving that process with PID 2 ran for 753051848 nanoseconds
+OSS: Dispatching process with PID 6 from queue 1 at time 4:112434131
+OSS: Time spent this dispatch was 389036402 nanoseconds
+OSS: Receiving that process with PID 6 ran for 64021779 nanoseconds
+OSS: Dispatching process with PID 5 from queue 2 at time 4:501470535
+OSS: Generating process with PID 2 and putting it in queue 2 at time 4:501470536
+OSS: Generating process with PID 9 and putting it in queue 2 at time 4:501470537
+OSS: Time spent this dispatch was 359846559 nanoseconds
+OSS: Receiving that process with PID 5 ran for 239422892 nanoseconds
+OSS: Dispatching process with PID 6 from queue 1 at time 4:861317097
+OSS: Time spent this dispatch was 9800049 nanoseconds
+OSS: Receiving that process with PID 6 ran for 98238985 nanoseconds
+OSS: Dispatching process with PID 1 from queue 2 at time 4:871117148
+OSS: Time spent this dispatch was 97887164 nanoseconds
+OSS: Generating process with PID 10 and putting it in queue 1 at time 4:969004313
+OSS: Receiving that process with PID 1 ran for 674068404 nanoseconds
+OSS: Dispatching process with PID 6 from queue 1 at time 4:969004314
+OSS: Time spent this dispatch was 6753519 nanoseconds
+OSS: Receiving that process with PID 6 ran for 26370539 nanoseconds
+OSS: Dispatching process with PID 3 from queue 2 at time 4:975757835
+OSS: Generating process with PID 11 and putting it in queue 2 at time 4:975757836
+OSS: Time spent this dispatch was 134241852 nanoseconds
+OSS: Receiving that process with PID 3 ran for 769733400 nanoseconds
+OSS: Dispatching process with PID 10 from queue 1 at time 5:109999689
+OSS: Time spent this dispatch was 423609821 nanoseconds
+OSS: Receiving that process with PID 10 ran for 304065132 nanoseconds
+OSS: Dispatching process with PID 7 from queue 2 at time 5:533609512
+OSS: Generating process with PID 12 and putting it in queue 2 at time 5:533609513
+OSS: Time spent this dispatch was 54912854 nanoseconds
+OSS: Receiving that process with PID 7 ran for 643798795 nanoseconds
+OSS: Dispatching process with PID 6 from queue 1 at time 5:588522368
+OSS: Time spent this dispatch was 249366995 nanoseconds
+OSS: Receiving that process with PID 6 ran for 793953659 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 5:837889365
+OSS: Time spent this dispatch was 213113269 nanoseconds
+OSS: Generating process with PID 13 and putting it in queue 2 at time 5:837889366
+OSS: Receiving that process with PID 0 ran for 198633495 nanoseconds
+OSS: Dispatching process with PID 10 from queue 1 at time 6:051002636
+OSS: Time spent this dispatch was 438056387 nanoseconds
+OSS: Receiving that process with PID 10 ran for 209940915 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 6:489059025
+OSS: Generating process with PID 14 and putting it in queue 1 at time 6:489059026
+OSS: Time spent this dispatch was 141821973 nanoseconds
+OSS: Receiving that process with PID 8 ran for 244463495 nanoseconds
+OSS: Dispatching process with PID 6 from queue 1 at time 6:630881000
+OSS: Time spent this dispatch was 418531899 nanoseconds
+OSS: Receiving that process with PID 6 ran for 145267752 nanoseconds
+OSS: Dispatching process with PID 4 from queue 2 at time 7:049412901
+OSS: Generating process with PID 8 and putting it in queue 2 at time 7:049412902
+OSS: Time spent this dispatch was 82468515 nanoseconds
+OSS: Receiving that process with PID 4 ran for 310534676 nanoseconds
+OSS: Dispatching process with PID 10 from queue 1 at time 7:131881418
+OSS: Time spent this dispatch was 80268076 nanoseconds
+OSS: Receiving that process with PID 10 ran for 369271080 nanoseconds
+OSS: Dispatching process with PID 9 from queue 2 at time 7:212149496
+OSS: Generating process with PID 10 and putting it in queue 1 at time 7:212149497
+OSS: Time spent this dispatch was 443345331 nanoseconds
+OSS: Receiving that process with PID 9 ran for 781252862 nanoseconds
+OSS: Dispatching process with PID 14 from queue 1 at time 7:655494829
+OSS: Time spent this dispatch was 277568009 nanoseconds
+OSS: Receiving that process with PID 14 ran for 130335916 nanoseconds
+OSS: Dispatching process with PID 2 from queue 2 at time 7:933062840
+OSS: Time spent this dispatch was 487297718 nanoseconds
+OSS: Receiving that process with PID 2 ran for 129178797 nanoseconds
+OSS: Dispatching process with PID 6 from queue 1 at time 8:420360559
+OSS: Time spent this dispatch was 180328644 nanoseconds
+OSS: Receiving that process with PID 6 ran for 17854755 nanoseconds
+OSS: Generating process with PID 15 and putting it in queue 2 at time 8:600689204
+OSS: Dispatching process with PID 5 from queue 2 at time 8:600689206
+OSS: Time spent this dispatch was 388491922 nanoseconds
+OSS: Receiving that process with PID 5 ran for 978403520 nanoseconds
+OSS: Dispatching process with PID 10 from queue 1 at time 8:989181129
+OSS: Time spent this dispatch was 222867015 nanoseconds
+OSS: Receiving that process with PID 10 ran for 918757821 nanoseconds
+OSS: Generating process with PID 16 and putting it in queue 2 at time 9:212048145
+OSS: Dispatching process with PID 1 from queue 2 at time 9:212048147
+OSS: Time spent this dispatch was 440696569 nanoseconds
+OSS: Receiving that process with PID 1 ran for 475055737 nanoseconds
+OSS: Generating process with PID 17 and putting it in queue 2 at time 9:652744717
+OSS: Dispatching process with PID 14 from queue 1 at time 9:652744718
+OSS: Time spent this dispatch was 285590413 nanoseconds
+OSS: Receiving that process with PID 14 ran for 271717038 nanoseconds
+OSS: Dispatching process with PID 11 from queue 2 at time 9:938335132
+OSS: Time spent this dispatch was 493504470 nanoseconds
+OSS: Receiving that process with PID 11 ran for 875681436 nanoseconds
+OSS: Dispatching process with PID 6 from queue 1 at time 10:431839603
+OSS: Time spent this dispatch was 297424508 nanoseconds
+OSS: Receiving that process with PID 6 ran for 718374842 nanoseconds
+OSS: Dispatching process with PID 3 from queue 2 at time 10:729264112
+OSS: Time spent this dispatch was 427285444 nanoseconds
+OSS: Receiving that process with PID 3 ran for 19357034 nanoseconds
+OSS: Dispatching process with PID 10 from queue 1 at time 11:156549557
+OSS: Time spent this dispatch was 462702365 nanoseconds
+OSS: Receiving that process with PID 10 ran for 431193723 nanoseconds
+OSS: Dispatching process with PID 12 from queue 2 at time 11:619251923
+OSS: Time spent this dispatch was 61278084 nanoseconds
+OSS: Receiving that process with PID 12 ran for 557621360 nanoseconds
+OSS: Dispatching process with PID 14 from queue 1 at time 11:680530008
+OSS: Time spent this dispatch was 186943640 nanoseconds
+OSS: Receiving that process with PID 14 ran for 165993255 nanoseconds
+OSS: Dispatching process with PID 7 from queue 2 at time 11:867473649
+OSS: Time spent this dispatch was 295172052 nanoseconds
+OSS: Receiving that process with PID 7 ran for 88213089 nanoseconds
+OSS: Dispatching process with PID 6 from queue 1 at time 12:162645702
+OSS: Time spent this dispatch was 458584196 nanoseconds
+OSS: Receiving that process with PID 6 ran for 674241358 nanoseconds
+OSS: Dispatching process with PID 13 from queue 2 at time 12:621229900
+OSS: Generating process with PID 6 and putting it in queue 2 at time 12:621229901
+OSS: Time spent this dispatch was 58088570 nanoseconds
+OSS: Receiving that process with PID 13 ran for 946402080 nanoseconds
+OSS: Dispatching process with PID 10 from queue 1 at time 12:679318472
+OSS: Time spent this dispatch was 217676253 nanoseconds
+OSS: Receiving that process with PID 10 ran for 427388141 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 12:896994726
+OSS: Time spent this dispatch was 162734740 nanoseconds
+OSS: Receiving that process with PID 0 ran for 633471937 nanoseconds
+OSS: Dispatching process with PID 14 from queue 1 at time 13:059729467
+OSS: Time spent this dispatch was 127387204 nanoseconds
+OSS: Receiving that process with PID 14 ran for 486734531 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 13:187116672
+OSS: Time spent this dispatch was 279947452 nanoseconds
+OSS: Receiving that process with PID 8 ran for 637790477 nanoseconds
+OSS: Dispatching process with PID 10 from queue 1 at time 13:467064125
+OSS: Time spent this dispatch was 275897243 nanoseconds
+OSS: Receiving that process with PID 10 ran for 751620594 nanoseconds
+OSS: Dispatching process with PID 4 from queue 2 at time 13:742961369
+OSS: Time spent this dispatch was 245125064 nanoseconds
+OSS: Receiving that process with PID 4 ran for 8145240 nanoseconds
+OSS: Dispatching process with PID 14 from queue 1 at time 13:988086434
+OSS: Time spent this dispatch was 305569749 nanoseconds
+OSS: Receiving that process with PID 14 ran for 994272085 nanoseconds
+OSS: Dispatching process with PID 9 from queue 2 at time 14:293656185
+OSS: Generating process with PID 14 and putting it in queue 2 at time 14:293656186
+OSS: Time spent this dispatch was 331695241 nanoseconds
+OSS: Receiving that process with PID 9 ran for 79700816 nanoseconds
+OSS: Dispatching process with PID 10 from queue 1 at time 14:625351428
+OSS: Time spent this dispatch was 245694071 nanoseconds
+OSS: Receiving that process with PID 10 ran for 650557908 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 14:871045501
+OSS: Time spent this dispatch was 402387898 nanoseconds
+OSS: Generating process with PID 10 and putting it in queue 2 at time 15:273433400
+OSS: Receiving that process with PID 15 ran for 545396591 nanoseconds
+OSS: Dispatching process with PID 2 from queue 2 at time 15:273433401
+OSS: Time spent this dispatch was 125081641 nanoseconds
+OSS: Receiving that process with PID 2 ran for 868883172 nanoseconds
+OSS: Dispatching process with PID 16 from queue 2 at time 15:398515043
+OSS: Time spent this dispatch was 167801604 nanoseconds
+OSS: Receiving that process with PID 16 ran for 441284117 nanoseconds
+OSS: Dispatching process with PID 5 from queue 2 at time 15:566316648
+OSS: Time spent this dispatch was 368672258 nanoseconds
+OSS: Receiving that process with PID 5 ran for 535686563 nanoseconds
+OSS: Dispatching process with PID 17 from queue 2 at time 15:934988907
+OSS: Time spent this dispatch was 21674852 nanoseconds
+OSS: Receiving that process with PID 17 ran for 385477858 nanoseconds
+OSS: Dispatching process with PID 1 from queue 2 at time 15:956663760
+OSS: Time spent this dispatch was 372212389 nanoseconds
+OSS: Receiving that process with PID 1 ran for 31406998 nanoseconds
+OSS: Dispatching process with PID 11 from queue 2 at time 16:328876150
+OSS: Time spent this dispatch was 21713828 nanoseconds
+OSS: Receiving that process with PID 11 ran for 649062057 nanoseconds
+OSS: Dispatching process with PID 3 from queue 2 at time 16:350589979
+OSS: Time spent this dispatch was 253199003 nanoseconds
+OSS: Receiving that process with PID 3 ran for 4676193 nanoseconds
+OSS: Dispatching process with PID 12 from queue 2 at time 16:603788983
+OSS: Time spent this dispatch was 144399508 nanoseconds
+OSS: Receiving that process with PID 12 ran for 498324068 nanoseconds
+OSS: Dispatching process with PID 7 from queue 2 at time 16:748188492
+OSS: Time spent this dispatch was 260187358 nanoseconds
+OSS: Receiving that process with PID 7 ran for 918473389 nanoseconds
+OSS: Dispatching process with PID 6 from queue 2 at time 17:008375851
+OSS: Time spent this dispatch was 102684982 nanoseconds
+OSS: Receiving that process with PID 6 ran for 695023335 nanoseconds
+OSS: Dispatching process with PID 13 from queue 2 at time 17:111060834
+OSS: Time spent this dispatch was 354548969 nanoseconds
+OSS: Receiving that process with PID 13 ran for 473840216 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 17:465609804
+OSS: Time spent this dispatch was 19236807 nanoseconds
+OSS: Receiving that process with PID 0 ran for 186616234 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 17:484846612
+OSS: Time spent this dispatch was 408015758 nanoseconds
+OSS: Receiving that process with PID 8 ran for 109453219 nanoseconds
+OSS: Dispatching process with PID 4 from queue 2 at time 17:892862371
+OSS: Time spent this dispatch was 50737336 nanoseconds
+OSS: Receiving that process with PID 4 ran for 996834800 nanoseconds
+OSS: Dispatching process with PID 14 from queue 2 at time 17:943599708
+OSS: Time spent this dispatch was 385037715 nanoseconds
+OSS: Receiving that process with PID 14 ran for 575817363 nanoseconds
+OSS: Dispatching process with PID 9 from queue 2 at time 18:328637424
+OSS: Time spent this dispatch was 313811573 nanoseconds
+OSS: Receiving that process with PID 9 ran for 271925946 nanoseconds
+OSS: Dispatching process with PID 10 from queue 2 at time 18:642448998
+OSS: Time spent this dispatch was 155849297 nanoseconds
+OSS: Receiving that process with PID 10 ran for 406712568 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 18:798298296
+OSS: Time spent this dispatch was 408290977 nanoseconds
+OSS: Receiving that process with PID 15 ran for 538540314 nanoseconds
+OSS: Dispatching process with PID 2 from queue 2 at time 19:206589274
+OSS: Time spent this dispatch was 43216507 nanoseconds
+OSS: Receiving that process with PID 2 ran for 677563125 nanoseconds
+OSS: Dispatching process with PID 16 from queue 2 at time 19:249805782
+OSS: Time spent this dispatch was 475174196 nanoseconds
+OSS: Receiving that process with PID 16 ran for 161489980 nanoseconds
+OSS: Dispatching process with PID 5 from queue 2 at time 19:724979979
+OSS: Time spent this dispatch was 12330400 nanoseconds
+OSS: Receiving that process with PID 5 ran for 556037940 nanoseconds
+OSS: Dispatching process with PID 17 from queue 2 at time 19:737310380
+OSS: Time spent this dispatch was 226945475 nanoseconds
+OSS: Receiving that process with PID 17 ran for 119573704 nanoseconds
+OSS: Dispatching process with PID 1 from queue 2 at time 19:964255856
+OSS: Time spent this dispatch was 390563445 nanoseconds
+OSS: Receiving that process with PID 1 ran for 127652919 nanoseconds
+OSS: Dispatching process with PID 11 from queue 2 at time 20:354819302
+OSS: Time spent this dispatch was 175192607 nanoseconds
+OSS: Receiving that process with PID 11 ran for 987132833 nanoseconds
+OSS: Dispatching process with PID 7 from queue 2 at time 20:530011910
+OSS: Time spent this dispatch was 467088643 nanoseconds
+OSS: Receiving that process with PID 7 ran for 468426366 nanoseconds
+OSS: Dispatching process with PID 13 from queue 2 at time 20:997100554
+OSS: Time spent this dispatch was 66912993 nanoseconds
+OSS: Receiving that process with PID 13 ran for 838841803 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 21:064013548
+OSS: Time spent this dispatch was 188192955 nanoseconds
+OSS: Receiving that process with PID 0 ran for 415574711 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 21:252206504
+OSS: Time spent this dispatch was 343908426 nanoseconds
+OSS: Receiving that process with PID 8 ran for 617650329 nanoseconds
+OSS: Dispatching process with PID 4 from queue 2 at time 21:596114931
+OSS: Time spent this dispatch was 389576276 nanoseconds
+OSS: Receiving that process with PID 4 ran for 925747023 nanoseconds
+OSS: Dispatching process with PID 14 from queue 2 at time 21:985691208
+OSS: Time spent this dispatch was 184975943 nanoseconds
+OSS: Receiving that process with PID 14 ran for 657719999 nanoseconds
+OSS: Dispatching process with PID 9 from queue 2 at time 22:170667152
+OSS: Time spent this dispatch was 75505050 nanoseconds
+OSS: Receiving that process with PID 9 ran for 93266920 nanoseconds
+OSS: Dispatching process with PID 10 from queue 2 at time 22:246172203
+OSS: Time spent this dispatch was 107273252 nanoseconds
+OSS: Receiving that process with PID 10 ran for 591993172 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 22:353445456
+OSS: Time spent this dispatch was 148031112 nanoseconds
+OSS: Receiving that process with PID 15 ran for 50679246 nanoseconds
+OSS: Dispatching process with PID 2 from queue 2 at time 22:501476569
+OSS: Time spent this dispatch was 22769302 nanoseconds
+OSS: Receiving that process with PID 2 ran for 619603653 nanoseconds
+OSS: Dispatching process with PID 16 from queue 2 at time 22:524245872
+OSS: Time spent this dispatch was 247256572 nanoseconds
+OSS: Receiving that process with PID 16 ran for 374976587 nanoseconds
+OSS: Dispatching process with PID 5 from queue 2 at time 22:771502445
+OSS: Time spent this dispatch was 111613878 nanoseconds
+OSS: Receiving that process with PID 5 ran for 274965531 nanoseconds
+OSS: Dispatching process with PID 17 from queue 2 at time 22:883116324
+OSS: Time spent this dispatch was 274996351 nanoseconds
+OSS: Receiving that process with PID 17 ran for 78702522 nanoseconds
+OSS: Dispatching process with PID 1 from queue 2 at time 23:158112676
+OSS: Time spent this dispatch was 270060677 nanoseconds
+OSS: Receiving that process with PID 1 ran for 103467202 nanoseconds
+OSS: Dispatching process with PID 13 from queue 2 at time 23:428173354
+OSS: Time spent this dispatch was 19041913 nanoseconds
+OSS: Receiving that process with PID 13 ran for 341909344 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 23:447215268
+OSS: Time spent this dispatch was 89033359 nanoseconds
+OSS: Receiving that process with PID 0 ran for 215466691 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 23:536248628
+OSS: Time spent this dispatch was 373186690 nanoseconds
+OSS: Receiving that process with PID 8 ran for 554168653 nanoseconds
+OSS: Dispatching process with PID 4 from queue 2 at time 23:909435319
+OSS: Time spent this dispatch was 452110578 nanoseconds
+OSS: Receiving that process with PID 4 ran for 274009302 nanoseconds
+OSS: Dispatching process with PID 9 from queue 2 at time 24:361545898
+OSS: Time spent this dispatch was 367276222 nanoseconds
+OSS: Receiving that process with PID 9 ran for 921963355 nanoseconds
+OSS: Dispatching process with PID 10 from queue 2 at time 24:728822121
+OSS: Time spent this dispatch was 366472879 nanoseconds
+OSS: Receiving that process with PID 10 ran for 27615628 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 25:095295001
+OSS: Time spent this dispatch was 430811226 nanoseconds
+OSS: Receiving that process with PID 15 ran for 474549475 nanoseconds
+OSS: Dispatching process with PID 2 from queue 2 at time 25:526106228
+OSS: Time spent this dispatch was 94153128 nanoseconds
+OSS: Receiving that process with PID 2 ran for 514503991 nanoseconds
+OSS: Dispatching process with PID 17 from queue 2 at time 25:620259357
+OSS: Time spent this dispatch was 241996931 nanoseconds
+OSS: Receiving that process with PID 17 ran for 806096880 nanoseconds
+OSS: Dispatching process with PID 1 from queue 2 at time 25:862256289
+OSS: Time spent this dispatch was 71945979 nanoseconds
+OSS: Receiving that process with PID 1 ran for 693926052 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 25:934202269
+OSS: Time spent this dispatch was 468891584 nanoseconds
+OSS: Receiving that process with PID 0 ran for 956622704 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 26:403093854
+OSS: Time spent this dispatch was 274159281 nanoseconds
+OSS: Receiving that process with PID 8 ran for 683559858 nanoseconds
+OSS: Dispatching process with PID 4 from queue 2 at time 26:677253136
+OSS: Time spent this dispatch was 114778732 nanoseconds
+OSS: Receiving that process with PID 4 ran for 564799833 nanoseconds
+OSS: Dispatching process with PID 9 from queue 2 at time 26:792031869
+OSS: Time spent this dispatch was 168267035 nanoseconds
+OSS: Receiving that process with PID 9 ran for 549155632 nanoseconds
+OSS: Dispatching process with PID 10 from queue 2 at time 26:960298905
+OSS: Time spent this dispatch was 400642097 nanoseconds
+OSS: Receiving that process with PID 10 ran for 39825300 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 27:360941003
+OSS: Time spent this dispatch was 255291991 nanoseconds
+OSS: Receiving that process with PID 15 ran for 555657354 nanoseconds
+OSS: Dispatching process with PID 2 from queue 2 at time 27:616232995
+OSS: Time spent this dispatch was 109826007 nanoseconds
+OSS: Receiving that process with PID 2 ran for 489675457 nanoseconds
+OSS: Dispatching process with PID 17 from queue 2 at time 27:726059003
+OSS: Time spent this dispatch was 263684759 nanoseconds
+OSS: Receiving that process with PID 17 ran for 980995033 nanoseconds
+OSS: Dispatching process with PID 1 from queue 2 at time 27:989743763
+OSS: Time spent this dispatch was 255474740 nanoseconds
+OSS: Receiving that process with PID 1 ran for 561936586 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 28:245218504
+OSS: Time spent this dispatch was 442068566 nanoseconds
+OSS: Receiving that process with PID 0 ran for 130960982 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 28:687287071
+OSS: Time spent this dispatch was 458026809 nanoseconds
+OSS: Receiving that process with PID 8 ran for 121947619 nanoseconds
+OSS: Dispatching process with PID 4 from queue 2 at time 29:145313881
+OSS: Time spent this dispatch was 488967963 nanoseconds
+OSS: Receiving that process with PID 4 ran for 372879793 nanoseconds
+OSS: Dispatching process with PID 10 from queue 2 at time 29:634281845
+OSS: Time spent this dispatch was 31493025 nanoseconds
+OSS: Receiving that process with PID 10 ran for 404696289 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 29:665774871
+OSS: Time spent this dispatch was 451138693 nanoseconds
+OSS: Receiving that process with PID 15 ran for 230964894 nanoseconds
+OSS: Dispatching process with PID 2 from queue 2 at time 30:116913565
+OSS: Time spent this dispatch was 40103950 nanoseconds
+OSS: Receiving that process with PID 2 ran for 603439005 nanoseconds
+OSS: Dispatching process with PID 17 from queue 2 at time 30:157017516
+OSS: Time spent this dispatch was 189862815 nanoseconds
+OSS: Receiving that process with PID 17 ran for 314263231 nanoseconds
+OSS: Dispatching process with PID 1 from queue 2 at time 30:346880332
+OSS: Time spent this dispatch was 363418864 nanoseconds
+OSS: Receiving that process with PID 1 ran for 606810299 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 30:710299197
+OSS: Time spent this dispatch was 344166060 nanoseconds
+OSS: Receiving that process with PID 0 ran for 858129850 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 31:054465258
+OSS: Time spent this dispatch was 250471503 nanoseconds
+OSS: Receiving that process with PID 8 ran for 607000192 nanoseconds
+OSS: Dispatching process with PID 4 from queue 2 at time 31:304936762
+OSS: Time spent this dispatch was 162657546 nanoseconds
+OSS: Receiving that process with PID 4 ran for 97324509 nanoseconds
+OSS: Dispatching process with PID 10 from queue 2 at time 31:467594309
+OSS: Time spent this dispatch was 86999966 nanoseconds
+OSS: Receiving that process with PID 10 ran for 5763494 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 31:554594276
+OSS: Time spent this dispatch was 186936492 nanoseconds
+OSS: Receiving that process with PID 15 ran for 350684726 nanoseconds
+OSS: Dispatching process with PID 17 from queue 2 at time 31:741530769
+OSS: Time spent this dispatch was 334162060 nanoseconds
+OSS: Receiving that process with PID 17 ran for 594749620 nanoseconds
+OSS: Dispatching process with PID 1 from queue 2 at time 32:075692830
+OSS: Time spent this dispatch was 69213592 nanoseconds
+OSS: Receiving that process with PID 1 ran for 129005058 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 32:144906423
+OSS: Time spent this dispatch was 354401203 nanoseconds
+OSS: Receiving that process with PID 0 ran for 644705221 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 32:499307627
+OSS: Time spent this dispatch was 49401510 nanoseconds
+OSS: Receiving that process with PID 8 ran for 58181555 nanoseconds
+OSS: Dispatching process with PID 4 from queue 2 at time 32:548709138
+OSS: Time spent this dispatch was 141662801 nanoseconds
+OSS: Receiving that process with PID 4 ran for 385894229 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 32:690371940
+OSS: Time spent this dispatch was 125603185 nanoseconds
+OSS: Receiving that process with PID 15 ran for 181766751 nanoseconds
+OSS: Dispatching process with PID 17 from queue 2 at time 32:815975126
+OSS: Time spent this dispatch was 496029982 nanoseconds
+OSS: Receiving that process with PID 17 ran for 981364801 nanoseconds
+OSS: Dispatching process with PID 1 from queue 2 at time 33:312005109
+OSS: Time spent this dispatch was 440691452 nanoseconds
+OSS: Receiving that process with PID 1 ran for 815466000 nanoseconds
+OSS: Dispatching process with PID 0 from queue 2 at time 33:752696562
+OSS: Time spent this dispatch was 466449039 nanoseconds
+OSS: Receiving that process with PID 0 ran for 137373864 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 34:219145602
+OSS: Time spent this dispatch was 134863552 nanoseconds
+OSS: Receiving that process with PID 8 ran for 981622937 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 34:354009155
+OSS: Time spent this dispatch was 106622843 nanoseconds
+OSS: Receiving that process with PID 15 ran for 821698340 nanoseconds
+OSS: Dispatching process with PID 17 from queue 2 at time 34:460631999
+OSS: Time spent this dispatch was 24899418 nanoseconds
+OSS: Receiving that process with PID 17 ran for 826654784 nanoseconds
+OSS: Dispatching process with PID 8 from queue 2 at time 34:485531418
+OSS: Time spent this dispatch was 127597098 nanoseconds
+OSS: Receiving that process with PID 8 ran for 359061478 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 34:613128517
+OSS: Time spent this dispatch was 401315903 nanoseconds
+OSS: Receiving that process with PID 15 ran for 981998301 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 35:014444421
+OSS: Time spent this dispatch was 220408882 nanoseconds
+OSS: Receiving that process with PID 15 ran for 905684561 nanoseconds
+OSS: Dispatching process with PID 15 from queue 2 at time 35:234853304
+OSS: Time spent this dispatch was 111257468 nanoseconds
+OSS: Receiving that process with PID 15 ran for 42978704 nanoseconds
