@@ -82,9 +82,10 @@ void scheduler() {
 		}
 		osclock.add(0,1000000);
 		//sleep(1);
+		
+		printf("total processes = 50\n");
+		bail();
 	}
-	printf("total processes = 50\n");
-	bail();
 }
 
 void dispatch(PCB *pcb) {
